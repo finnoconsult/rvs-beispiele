@@ -8,5 +8,5 @@ Link zur Aufgabe: [finnotraining.at/aufgaben/poller](https://finnotraining.at/au
 ```sh
 npm install  # installiert alle Abhängigkeiten
 
-node index  # startet den Entwicklungsserver
+node index  # startet den Entwicklungsserver auf localhost:8080
 ```
