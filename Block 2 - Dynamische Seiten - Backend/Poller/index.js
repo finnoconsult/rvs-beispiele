@@ -1,8 +1,8 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const generateId = require('../password');
 
 const app = express();
+const generateId = () => Math.random().toString(36).substr(2);
 const polls = {}; // { hash: { hash, count, question, answers: [{ value, count }] }}
 
 app.set('view engine', 'ejs');
@@ -22,13 +22,13 @@ app.post('/create-poll', (req, res) => {
   polls[hash] = { hash, question, answers, count: 0 };
 
   res.setHeader('Location', `/poll/${hash}`);
-  res.send(301);
+  res.sendStatus(301);
 });
 
 app.get('/poll/:hash', (req, res) => {
   const poll = polls[req.params.hash];
 
-  if (!poll) return res.send(404);
+  if (!poll) return res.sendStatus(404);
 
   res.render('poll', poll);
 });
@@ -36,11 +36,11 @@ app.get('/poll/:hash', (req, res) => {
 app.post('/result/:hash', (req, res) => {
   const poll = polls[req.params.hash];
 
-  if (!poll) return res.send(404);
+  if (!poll) return res.sendStatus(404);
 
   const answer = poll.answers.find((a) => a.value === req.body.answer);
 
-  if (!answer) return res.send(409);
+  if (!answer) return res.sendStatus(409);
 
   answer.count++;
   poll.count++;
