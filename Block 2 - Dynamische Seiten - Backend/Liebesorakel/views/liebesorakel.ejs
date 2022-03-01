@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+   <meta charset="utf-8">
+   <title>Liebes-Orakel</title>
+   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Petit+Formal+Script">
+   <link rel="stylesheet" href="/style.css">
+</head>
+<body class="hearty-bg">
+
+   <header class="header lovebox">
+      <h1>Finde die wahre Liebe</h1>
+      <strong>Gib den Namen deines Schatzes ein und erfahre, ob ihr für einander bestimmt seid.</strong>
+   </header>
+
+   <form class="form lovebox" action="/" method="GET">
+      <input type="text" name="name_du" placeholder="Dein Name" value="<%= name_du %>">
+      <input type="text" name="name_schatzi" placeholder="Schatzis Name" value="<%= name_schatzi %>">
+      <button type="submit">♥</button>
+   </form>
+
+   <% if (score) { %>
+      <div class="result lovebox">
+         <p class="statement">Ihr passt zu</p>
+         <p class="score"><%= score %>%</p>
+         <p class="statement">zusammen.</p>
+         <p class="statement"><%= statement %></p>
+      </div>
+   <% } %>
+
+   <footer class="footer lovebox">
+      <p>Wir übernehmen keine Haftung für gebrochene Herzen.</p>
+   </footer>
+
+</body>
+</html>

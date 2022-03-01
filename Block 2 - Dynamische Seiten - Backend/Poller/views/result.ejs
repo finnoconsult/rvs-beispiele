@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Poller</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+  </head>
+  <body>
+    <%- include('header') %>
+
+    <div class="container">
+      <h2 class="mt-4 mb-4">Bester Wochentag?</h2>
+
+      <% for(var i = 0; i < answers.length; i++) { %>
+
+        <div class="d-flex p-2 bd-highlight">
+          <span class="mr-3" style="width: 6rem"><%= answers[i].value %></span>
+          <div class="progress" style="height: 20px; flex: 1">
+            <div class="progress-bar text-left pl-2" role="progressbar" style="width: <%= (answers[i].count / count) * 100 %>%;">
+              <%= ((answers[i].count / count) * 100).toFixed() %>%
+            </div>
+          </div>
+        </div>
+
+      <% } %>
+
+    </div>
+  </body>
+</html>

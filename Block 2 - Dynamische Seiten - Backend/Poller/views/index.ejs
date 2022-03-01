@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Poller</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+  </head>
+  <body>
+    <%- include('header') %>
+
+    <div class="container">
+      <h2 class="mt-4 mb-4">Neue Umfrage erstellen</h2>
+      <form action="/create-poll" method="POST">
+        <div class="form-group">
+          <label for="question">Frage</label>
+          <input type="qustion" class="form-control" id="question" name="question">
+        </div>
+
+        <div class="form-group">
+          <label for="answers">Antworten</label>
+          <textarea class="form-control" id="answers" name="answers" rows="7"></textarea>
+          <small id="emailHelp" class="form-text text-muted">Eine Antwortmöglichkeit pro Zeile.</small>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Umfrage erstellen</button>
+      </form>
+    </div>
+  </body>
+</html>
