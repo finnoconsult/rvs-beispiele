@@ -13,16 +13,14 @@
   </head>
   <body>
     <div class="container mt-2">
-      <form action="./">
-        <textarea class="form-control"></textarea>
-        <button class="btn btn-primary mt-2" onClick="localStorage.removeItem('backup')">Absenden</button>
-      </form>
+      <textarea class="form-control"></textarea>
+      <button class="btn btn-primary mt-2" onClick="localStorage.removeItem('backup')">Absenden</button>
     </div>
 
     <script>
-        const ta = document.querySelector('textarea');
-        ta.value = localStorage.getItem('backup');
-        ta.onkeyup = () => localStorage.setItem('backup', ta.value);
+      const ta = document.querySelector('textarea');
+      ta.value = localStorage.getItem('backup');
+      ta.onkeyup = () => localStorage.setItem('backup', ta.value);
     </script>
   </body>
 </html>

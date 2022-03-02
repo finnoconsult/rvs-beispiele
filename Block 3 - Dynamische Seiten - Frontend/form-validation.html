@@ -26,15 +26,13 @@
       if (!value) {
         input.classList.remove('is-valid');
         input.classList.remove('is-invalid');
-      }
-      else {
-        const isValid = value.length >= 5 && /\d/.test(value) && /[a-z]/.test(value) && /[A-Z]/.test(value);
-
+      } else {
+        const isValid = value.length > 5 && /\d+/.test(value) && /[A-Z]+/.test(value) && /[a-z]+/.test(value);
         input.classList.toggle('is-valid', isValid);
         input.classList.toggle('is-invalid', !isValid);
 
         button.disabled = !isValid;
       }
-    })
+    });
   </script>
 </div>

@@ -739,17 +739,14 @@
   const items = liste.querySelectorAll('li');
 
   input.addEventListener('keyup', () => {
-
     const value = input.value.toLowerCase();
-    console.log('value', value);
-    liste.classList.toggle('is-searching', !!value)
 
-    items.forEach(item => {
-      const isMatch = item.innerText.toLowerCase().includes(value);
-      item.classList.toggle('is-visible', isMatch);
+    liste.classList.toggle('is-searching', !!value.length);
+
+    items.forEach((item) => {
+      const [kfz, stadt] = item.innerText.toLowerCase().split('; ');
+      const isVisible = kfz.startsWith(value) || stadt.includes(value);
+      item.classList.toggle('is-visible', isVisible);
     });
-
   });
-
-
 </script>
