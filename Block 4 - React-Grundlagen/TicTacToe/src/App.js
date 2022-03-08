@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useLocalStorageState } from './useLocalStorageState';
 import './App.css';
 
 /* Aufgaben:
@@ -8,9 +8,28 @@ import './App.css';
 */
 
 export function TicTacToe() {
-  // INFO unsere neun Felder, anfänglich sind alle `null`
-  const [squares, setSquares] = useState(Array(9).fill(null));
+  const [history, setHistory] = useLocalStorageState('ttt-history', [Array(9).fill(null)]);
+  const pushToHistory = (stateArr) => setHistory([...history, stateArr]);
+  const restart = () => setHistory(history.slice(0, 1));
+  const undo = () => setHistory(history.slice(0, -1));
+  const lastState = history[history.length - 1];
 
+  return (
+    <div className="game">
+      <Board squares={lastState} handleUpdate={pushToHistory} />
+      <button onClick={restart}>restart</button>{' '}
+      <button onClick={undo} disabled={history.length <= 1}>
+        undo
+      </button>
+      <h4 style={{ marginTop: 24 }}>History</h4>
+      {[...history].reverse().map((board) => (
+        <Board squares={board} />
+      ))}
+    </div>
+  );
+}
+
+function Board({ squares, handleUpdate }) {
   const nextPlayer = getNextPlayer(squares);
   const winner = getWinner(squares);
   const status = getStatusMessage(winner, squares, nextPlayer);
@@ -19,17 +38,12 @@ export function TicTacToe() {
     if (winner || squares[squareIndex]) return;
     const squaresCopy = [...squares];
     squaresCopy[squareIndex] = nextPlayer;
-    setSquares(squaresCopy);
-  }
-
-  function restart() {
-    setSquares(Array(9).fill(null));
+    handleUpdate(squaresCopy);
   }
 
   return (
-    <div className="game">
+    <>
       <div className="status">{status}</div>
-
       <div className="squares">
         {squares.map((square, index) => (
           <button key={index} onClick={() => updateSquare(index)}>
@@ -37,11 +51,7 @@ export function TicTacToe() {
           </button>
         ))}
       </div>
-
-      <button className="restart" onClick={restart}>
-        restart
-      </button>
-    </div>
+    </>
   );
 }
 
