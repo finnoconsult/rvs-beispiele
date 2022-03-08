@@ -2,12 +2,20 @@ import { useState, useEffect, useRef } from 'react';
 
 const toTitleCase = (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
 
+const STATES = {
+  IDLE: 'IDLE',
+  LOADING: 'LOADING',
+  REJECTED: 'REJECTED',
+  RESOLVED: 'RESOLVED',
+};
+
 export function Pokedex() {
   const [pokeId, setPokeId] = useState(null);
 
   return (
     <div className="container mt-2" style={{ width: 300 }}>
       <PokeSearch value={pokeId} onChange={setPokeId} />
+
       <div className="btn-toolbar">
         <span className="btn-sm">e.g.</span>
         <div className="btn-group mb-1">
@@ -22,6 +30,7 @@ export function Pokedex() {
           </button>
         </div>
       </div>
+
       {pokeId && <PokeData pokeId={pokeId} />}
     </div>
   );
@@ -55,16 +64,59 @@ function PokeSearch({ value, onChange }) {
   );
 }
 
-function PokeData({ pokeId }) {
-  const [pokemon, setPokemon] = useState();
+function usePokemon(pokeId) {
+  const [state, setState] = useState({ status: STATES.IDLE });
 
   useEffect(() => {
+    if (!pokeId) return;
+
+    // caching layer
+    // const data = localStorage.getItem(pokeId);
+
+    // if (data) {
+    //   setState({ status: STATES.RESOLVED, pokemon: JSON.parse(data) });
+    //   return;
+    // }
+
+    setState({ status: STATES.LOADING });
+
     fetch(`https://pokeapi.co/api/v2/pokemon/${pokeId}`)
-      .then((response) => response.json())
-      .then(setPokemon);
+      .then((response) => {
+        if (response.ok) return response.json();
+        throw new Error('404 Pokemon not found');
+      })
+      .then((json) => {
+        // localStorage.setItem(pokeId, JSON.stringify(json));
+        setState({ status: STATES.RESOLVED, pokemon: json });
+      })
+      .catch((error) => {
+        setState({ status: STATES.REJECTED, error: error.message });
+      });
   }, [pokeId]);
 
-  if (!pokemon) return null;
+  return state;
+}
+
+function PokeData({ pokeId }) {
+  const { status, error, pokemon } = usePokemon(pokeId);
+
+  // state: loading
+  if (status === STATES.LOADING)
+    return (
+      <div className="text-center mt-5 mb-5">
+        <div className="spinner-grow text-secondary" />
+      </div>
+    );
+
+  // state: error
+  if (status === STATES.REJECTED)
+    return (
+      <div className="alert alert-danger" role="alert">
+        {error}
+      </div>
+    );
+
+  if (status === STATES.IDLE) return null;
 
   const name = toTitleCase(pokemon.name).replace('-f', ' ♀').replace('-m', ' ♂');
   const image = pokemon.sprites.other['official-artwork'].front_default || pokemon.sprites.front_default;
@@ -76,9 +128,9 @@ function PokeData({ pokeId }) {
         <h2 className="card-title">{name}</h2>
         <div className="card mt-2">
           <ul className="list-group list-group-flush">
-            {pokemon.abilities.map((ability) => (
-              <li key={ability.ability.name} className="list-group-item">
-                {ability.ability.name}
+            {pokemon.abilities.map(({ ability }) => (
+              <li key={ability.name} className="list-group-item">
+                {ability.name}
               </li>
             ))}
           </ul>
