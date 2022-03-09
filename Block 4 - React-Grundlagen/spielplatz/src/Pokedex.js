@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 import axios from 'axios';
 
 const toTitleCase = (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
@@ -14,6 +15,7 @@ const STATES = {
 
 export function Pokedex() {
   const [pokeId, setPokeId] = useState(null);
+  const resetPokeId = () => setPokeId(null);
 
   return (
     <div className="container mt-2" style={{ width: 300 }}>
@@ -34,7 +36,26 @@ export function Pokedex() {
         </div>
       </div>
 
-      {pokeId && <PokeData pokeId={pokeId} />}
+      {pokeId && (
+        <ErrorBoundary FallbackComponent={ErrorFallback} resetKeys={[pokeId]} onReset={resetPokeId}>
+          <PokeData pokeId={pokeId} />
+        </ErrorBoundary>
+      )}
+    </div>
+  );
+}
+
+function ErrorFallback({ error, resetErrorBoundary }) {
+  return (
+    <div className="alert alert-danger" role="alert">
+      <button onClick={resetErrorBoundary} className="close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+      <h4 className="alert-heading">Error</h4>
+      <p>{error.message}</p>
+      <button onClick={resetErrorBoundary} type="button" className="btn btn-danger">
+        Reset
+      </button>
     </div>
   );
 }
@@ -82,7 +103,7 @@ function useApi(url) {
 
     axios
       .get(url, { cancelToken: source.token })
-      .then(randomTimeout) // ⚠️ künstliche verzögerung
+      // .then(randomTimeout) // ⚠️ künstliche verzögerung
       .then((response) => {
         console.log('✅ response arrived', url);
         setState({ status: STATES.RESOLVED, data: response.data });
@@ -104,6 +125,12 @@ function useApi(url) {
 function PokeData({ pokeId }) {
   const url = pokeId && `https://pokeapi.co/api/v2/pokemon/${pokeId}`;
   const { status, error, data } = useApi(url);
+
+  // code um zufällig fehler zu triggern
+  // if (Math.random() > 0.9) {
+  //   console.log('oh no');
+  //   throw new Error('pech gehabt');
+  // }
 
   // state: loading
   if (status === STATES.LOADING)
