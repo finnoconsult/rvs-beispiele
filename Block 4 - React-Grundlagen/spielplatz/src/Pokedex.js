@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from 'react';
 
 const toTitleCase = (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
 
+const randomTimeout = (data) => new Promise((resolve) => setTimeout(resolve, Math.random() * 5000, data));
+
 const STATES = {
   IDLE: 'IDLE',
   LOADING: 'LOADING',
@@ -67,6 +69,8 @@ function PokeSearch({ value, onChange }) {
 function usePokemon(pokeId) {
   const [state, setState] = useState({ status: STATES.IDLE });
 
+  let isCanceled = false;
+
   useEffect(() => {
     if (!pokeId) return;
 
@@ -80,8 +84,13 @@ function usePokemon(pokeId) {
 
     setState({ status: STATES.LOADING });
 
+    console.log('🚀 loading data', pokeId);
+
     fetch(`https://pokeapi.co/api/v2/pokemon/${pokeId}`)
+      .then(randomTimeout) // ⚠️ künstliche verzögerung
       .then((response) => {
+        console.log('✅ response arrived', pokeId, isCanceled);
+        if (isCanceled) throw null;
         if (response.ok) return response.json();
         throw new Error('404 Pokemon not found');
       })
@@ -90,8 +99,14 @@ function usePokemon(pokeId) {
         setState({ status: STATES.RESOLVED, pokemon: json });
       })
       .catch((error) => {
+        if (isCanceled) return;
         setState({ status: STATES.REJECTED, error: error.message });
       });
+
+    return () => {
+      console.log('❌ clean up – call is canceled', pokeId);
+      isCanceled = true;
+    };
   }, [pokeId]);
 
   return state;
