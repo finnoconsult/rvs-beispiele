@@ -66,11 +66,11 @@ function PokeSearch({ value, onChange }) {
   );
 }
 
-function usePokemon(pokeId) {
+function useApi(url) {
   const [state, setState] = useState({ status: STATES.IDLE });
 
   useEffect(() => {
-    if (!pokeId) return;
+    if (!url) return;
 
     const abortController = new AbortController();
     const { signal } = abortController;
@@ -85,20 +85,20 @@ function usePokemon(pokeId) {
 
     setState({ status: STATES.LOADING });
 
-    console.log('🚀 loading data', pokeId);
+    console.log('🚀 loading data', url);
 
-    fetch(`https://pokeapi.co/api/v2/pokemon/${pokeId}`, { signal })
+    fetch(url, { signal })
       .then(randomTimeout) // ⚠️ künstliche verzögerung
       .then((response) => {
-        console.log('✅ response arrived', pokeId, signal.aborted);
+        console.log('✅ response arrived', url, signal.aborted);
         if (signal.aborted) throw null;
         if (response.ok) return response.json();
-        throw new Error('404 Pokemon not found');
+        throw new Error(`${response.status} ${response.statusText}`.trim());
       })
       .then((json) => {
-        // localStorage.setItem(pokeId, JSON.stringify(json));
+        // localStorage.setItem(url, JSON.stringify(json));
         if (signal.aborted) throw null;
-        setState({ status: STATES.RESOLVED, pokemon: json });
+        setState({ status: STATES.RESOLVED, data: json });
       })
       .catch((error) => {
         if (signal.aborted) return;
@@ -106,16 +106,17 @@ function usePokemon(pokeId) {
       });
 
     return () => {
-      console.log('❌ clean up – call is canceled', pokeId);
+      console.log('❌ clean up – call is canceled', url);
       abortController.abort();
     };
-  }, [pokeId]);
+  }, [url]);
 
   return state;
 }
 
 function PokeData({ pokeId }) {
-  const { status, error, pokemon } = usePokemon(pokeId);
+  const url = pokeId && `https://pokeapi.co/api/v2/pokemon/${pokeId}`;
+  const { status, error, data } = useApi(url);
 
   // state: loading
   if (status === STATES.LOADING)
@@ -135,8 +136,8 @@ function PokeData({ pokeId }) {
 
   if (status === STATES.IDLE) return null;
 
-  const name = toTitleCase(pokemon.name).replace('-f', ' ♀').replace('-m', ' ♂');
-  const image = pokemon.sprites.other['official-artwork'].front_default || pokemon.sprites.front_default;
+  const name = toTitleCase(data.name).replace('-f', ' ♀').replace('-m', ' ♂');
+  const image = data.sprites.other['official-artwork'].front_default || data.sprites.front_default;
 
   return (
     <div className="card shadow-sm">
@@ -145,7 +146,7 @@ function PokeData({ pokeId }) {
         <h2 className="card-title">{name}</h2>
         <div className="card mt-2">
           <ul className="list-group list-group-flush">
-            {pokemon.abilities.map(({ ability }) => (
+            {data.abilities.map(({ ability }) => (
               <li key={ability.name} className="list-group-item">
                 {ability.name}
               </li>
