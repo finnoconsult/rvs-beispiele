@@ -1,11 +1,14 @@
+import { useNavigate } from 'react-router-dom';
 import { ErrorBoundary } from 'react-error-boundary';
 import { useApi, STATES } from './useApi';
 import { ProductCard } from './ProductCard';
 import { ErrorFallback } from './ErrorFallback';
 import { API_URL } from './config';
 
-export function Products({ showProduct }) {
+export function Products() {
+  const navigate = useNavigate();
   const { status, error, data } = useApi(API_URL);
+  const reset = () => navigate('/');
 
   if (status === STATES.LOADING)
     return (
@@ -32,8 +35,8 @@ export function Products({ showProduct }) {
       }}
     >
       {data.map((product) => (
-        <ErrorBoundary key={product.id} FallbackComponent={ErrorFallback} onReset={() => showProduct(null)}>
-          <ProductCard {...product} onClick={showProduct} />
+        <ErrorBoundary key={product.id} FallbackComponent={ErrorFallback} onReset={reset}>
+          <ProductCard {...product} />
         </ErrorBoundary>
       ))}
     </div>

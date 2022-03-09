@@ -1,8 +1,10 @@
+import { useParams } from 'react-router-dom';
 import { useApi, STATES } from './useApi';
 import { API_URL } from './config';
 
-export function Product({ id, onClick }) {
-  const url = `${API_URL}/${id}`;
+export function Product() {
+  const params = useParams();
+  const url = `${API_URL}/${params.id}`;
   const { status, error, data } = useApi(url);
 
   if (status === STATES.LOADING)

@@ -1,21 +1,23 @@
+import { Link, NavLink } from 'react-router-dom';
+
 export function Header() {
   return (
     <div className="container">
       <header className="d-flex flex-wrap justify-content-between py-3 mb-4 border-bottom">
-        <a href="/" className="d-flex align-items-center text-decoration-none">
+        <Link to="/" className="d-flex align-items-center text-decoration-none">
           <h1 className="fs-3 m-0">Merx</h1>
-        </a>
+        </Link>
 
         <ul className="nav nav-pills">
           <li className="nav-item">
-            <a href="#" className="nav-link active" aria-current="page">
+            <NavLink to="/" className={({ isActive }) => 'nav-link' + (isActive ? ' active' : '')}>
               Home
-            </a>
+            </NavLink>
           </li>
           <li className="nav-item">
-            <a href="#" className="nav-link">
+            <NavLink to="/about" className={({ isActive }) => 'nav-link' + (isActive ? ' active' : '')}>
               About
-            </a>
+            </NavLink>
           </li>
         </ul>
       </header>
