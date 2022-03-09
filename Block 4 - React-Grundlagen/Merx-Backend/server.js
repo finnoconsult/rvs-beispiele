@@ -1,6 +1,5 @@
 const fs = require('fs');
 const crypto = require('crypto');
-const argon2 = require('argon2');
 const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
@@ -17,7 +16,7 @@ app.use(cors());
 const dummyDescription = fs.readFileSync('./dummy-description.html', 'utf-8');
 
 const users = {
-  'info@rvs.at': '$argon2i$v=19$m=4096,t=3,p=1$9eqgtr3IgF8t/NtplKy34g$vMsINw0RdTyfUtvc/YFP4v1fBIjWvA9XR2KyDBqVwZE', // eins
+  'info@rvs.at': 'ware',
 };
 const sessions = {};
 
@@ -36,13 +35,9 @@ app.use((req, res, next) => {
 // Nutzeraccount anlegen
 app.post('/register', (req, res) => {
   if (!req.body) return res.sendStatus(400);
-
   const { email, password } = req.body;
-
-  argon2.hash(password).then((hash) => {
-    users[email] = hash;
-    res.send({ success: true, data: email });
-  });
+  users[email] = password;
+  res.send({ success: true, data: email });
 });
 
 // Nutzer einloggen
@@ -56,23 +51,19 @@ app.post('/login', (req, res) => {
   }
 
   const { email, password } = req.body;
-  const hash = users[email];
 
-  argon2
-    .verify(hash, password)
-    .then((isCorrect) => {
-      if (!isCorrect) throw new Error('wrong email or password');
-      const session = generateToken();
-      sessions[session] = email;
-      res.cookie('session', session, {
-        expires: 0,
-        httpOnly: true /*secure: true*/,
-      });
-      return res.send({ success: true, data: { email, name: 'Max Muster' } });
-    })
-    .catch((err) => {
-      res.status(401).send({ success: false, error: err.message });
-    });
+  if (password !== users[email]) {
+    return res.status(401).send({ success: false, error: 'wrong email or password' });
+  }
+
+  // user exists and password is correct
+  const session = generateToken();
+  sessions[session] = email;
+  res.cookie('session', session, {
+    expires: 0,
+    httpOnly: true /*secure: true*/,
+  });
+  return res.send({ success: true, data: { email, name: 'Max Muster' } });
 });
 
 // Nutzer ausloggen
