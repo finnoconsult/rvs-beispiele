@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
 
 const toTitleCase = (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
 
@@ -72,42 +73,28 @@ function useApi(url) {
   useEffect(() => {
     if (!url) return;
 
-    const abortController = new AbortController();
-    const { signal } = abortController;
-
-    // caching layer
-    // const data = localStorage.getItem(pokeId);
-
-    // if (data) {
-    //   setState({ status: STATES.RESOLVED, pokemon: JSON.parse(data) });
-    //   return;
-    // }
+    const cancelToken = axios.CancelToken;
+    const source = cancelToken.source();
 
     setState({ status: STATES.LOADING });
 
     console.log('🚀 loading data', url);
 
-    fetch(url, { signal })
+    axios
+      .get(url, { cancelToken: source.token })
       .then(randomTimeout) // ⚠️ künstliche verzögerung
       .then((response) => {
-        console.log('✅ response arrived', url, signal.aborted);
-        if (signal.aborted) throw null;
-        if (response.ok) return response.json();
-        throw new Error(`${response.status} ${response.statusText}`.trim());
-      })
-      .then((json) => {
-        // localStorage.setItem(url, JSON.stringify(json));
-        if (signal.aborted) throw null;
-        setState({ status: STATES.RESOLVED, data: json });
+        console.log('✅ response arrived', url);
+        setState({ status: STATES.RESOLVED, data: response.data });
       })
       .catch((error) => {
-        if (signal.aborted) return;
+        if (axios.isCancel(error)) return 'request canceled';
         setState({ status: STATES.REJECTED, error: error.message });
       });
 
     return () => {
       console.log('❌ clean up – call is canceled', url);
-      abortController.abort();
+      source.cancel('request canceled');
     };
   }, [url]);
 
