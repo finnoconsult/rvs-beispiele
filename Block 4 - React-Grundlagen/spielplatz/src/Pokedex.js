@@ -69,10 +69,11 @@ function PokeSearch({ value, onChange }) {
 function usePokemon(pokeId) {
   const [state, setState] = useState({ status: STATES.IDLE });
 
-  let isCanceled = false;
-
   useEffect(() => {
     if (!pokeId) return;
+
+    const abortController = new AbortController();
+    const { signal } = abortController;
 
     // caching layer
     // const data = localStorage.getItem(pokeId);
@@ -86,26 +87,27 @@ function usePokemon(pokeId) {
 
     console.log('🚀 loading data', pokeId);
 
-    fetch(`https://pokeapi.co/api/v2/pokemon/${pokeId}`)
+    fetch(`https://pokeapi.co/api/v2/pokemon/${pokeId}`, { signal })
       .then(randomTimeout) // ⚠️ künstliche verzögerung
       .then((response) => {
-        console.log('✅ response arrived', pokeId, isCanceled);
-        if (isCanceled) throw null;
+        console.log('✅ response arrived', pokeId, signal.aborted);
+        if (signal.aborted) throw null;
         if (response.ok) return response.json();
         throw new Error('404 Pokemon not found');
       })
       .then((json) => {
         // localStorage.setItem(pokeId, JSON.stringify(json));
+        if (signal.aborted) throw null;
         setState({ status: STATES.RESOLVED, pokemon: json });
       })
       .catch((error) => {
-        if (isCanceled) return;
+        if (signal.aborted) return;
         setState({ status: STATES.REJECTED, error: error.message });
       });
 
     return () => {
       console.log('❌ clean up – call is canceled', pokeId);
-      isCanceled = true;
+      abortController.abort();
     };
   }, [pokeId]);
 
