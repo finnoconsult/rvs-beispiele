@@ -1,37 +1,44 @@
-import { Link } from 'react-router-dom';
-import { Box, IconButton } from '@mui/material';
-import { Heart } from '../Icons';
+import { useState } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
+import Link from '@mui/material/Link';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 
-const priceToNum = (price) => parseInt(price.replace(',', '.'), 10);
+import { Price } from './Price';
 
 export function ProductCard({ id, image, title, body, price }) {
+  const [isFav, setIsFav] = useState(false);
   const url = `/products/${id}`;
 
   return (
-    <div className="product-card">
-      <Link to={url}>
-        <img src={image} className="image" alt={title} />
+    <Card variant="outlined" sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <Link component={RouterLink} to={url}>
+        <CardMedia component="img" image={image} alt={title} />
       </Link>
-      <Link to={url}>
-        <h2 className="title">{title}</h2>
-      </Link>
-      <div className="body">{body}</div>
-      <div className="spread">
-        <IconButton variant="contained" type="button">
-          <Heart />
+
+      <CardContent sx={{ flexGrow: 1 }}>
+        <Link component={RouterLink} to={url}>
+          <Typography gutterBottom variant="h5" component="h2">
+            {title}
+          </Typography>
+        </Link>
+
+        <Typography>{body}</Typography>
+      </CardContent>
+
+      <CardActions sx={{ justifyContent: 'space-between', px: 2, pt: 0 }}>
+        <IconButton onClick={() => setIsFav((b) => !b)} color="primary">
+          {isFav ? <FavoriteOutlinedIcon /> : <FavoriteBorderOutlinedIcon />}
         </IconButton>
-        <Box
-          sx={{
-            padding: 2,
-            fontSize: 24,
-            fontWeight: 'bold',
-            textAlign: 'right',
-            color: priceToNum(price) > 80 ? 'red' : 'green',
-          }}
-        >
-          {price}
-        </Box>
-      </div>
-    </div>
+
+        <Price price={price} />
+      </CardActions>
+    </Card>
   );
 }

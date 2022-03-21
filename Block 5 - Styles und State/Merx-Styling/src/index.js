@@ -7,8 +7,8 @@ import ReactDOM from 'react-dom';
 // import { App } from './bem/App';
 // import { App } from './css-modules/App';
 // import { App } from './css-in-js/App';
-// import { App } from './mui/App';
-import { App } from './tailwind/App';
+import { App } from './mui/App';
+// import { App } from './tailwind/App';
 
 ReactDOM.render(
   <React.StrictMode>
