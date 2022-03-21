@@ -1,0 +1,80 @@
+@import 'variables.scss';
+@import 'products-card.scss';
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif, 'Apple Color Emoji',
+    'Segoe UI Emoji';
+  font-size: 16px;
+  line-height: 1.4;
+  color: #333;
+}
+
+a {
+  color: $primary;
+}
+
+main {
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 0;
+}
+
+header a {
+  text-decoration: none;
+}
+
+.title {
+  margin: 0;
+  line-height: 1;
+}
+
+.nav {
+  margin: 0;
+  padding: 0;
+  gap: 1rem;
+  list-style: none;
+  line-height: 1;
+}
+
+.container {
+  max-width: 60rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.spread {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.warning {
+  padding: 1rem;
+  background-color: $primary;
+  border-radius: 0.5rem;
+}
+
+.products {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+}
+
+.fav-button {
+  padding: 1rem;
+  border: 0;
+  background-color: transparent;
+  cursor: pointer;
+  font-size: 1rem;
+  color: $primary;
+}
+
+.center {
+  text-align: center;
+}
