@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
-import IconButton from '@mui/material/IconButton';
+import { Box, IconButton } from '@mui/material';
 import { Heart } from '../Icons';
+
+const priceToNum = (price) => parseInt(price.replace(',', '.'), 10);
 
 export function ProductCard({ id, image, title, body, price }) {
   const url = `/products/${id}`;
@@ -18,7 +20,17 @@ export function ProductCard({ id, image, title, body, price }) {
         <IconButton variant="contained" type="button">
           <Heart />
         </IconButton>
-        <div className="price">{price}</div>
+        <Box
+          sx={{
+            padding: 2,
+            fontSize: 24,
+            fontWeight: 'bold',
+            textAlign: 'right',
+            color: priceToNum(price) > 80 ? 'red' : 'green',
+          }}
+        >
+          {price}
+        </Box>
       </div>
     </div>
   );
