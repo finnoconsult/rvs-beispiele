@@ -2,6 +2,10 @@ import Grid from '@mui/material/Grid';
 import { ProductCard } from './ProductCard';
 
 export function Products({ products }) {
+  /*
+    TODO: states anzeigen: loading, error, success
+   */
+
   return (
     <Grid container spacing={4} mt={0} mb={4}>
       {products.map((product) => (

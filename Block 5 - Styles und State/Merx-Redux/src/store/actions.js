@@ -3,6 +3,11 @@ export const USER_ERROR = 'USER_ERROR';
 export const USER_LOGIN = 'USER_LOGIN';
 export const USER_LOGOUT = 'USER_LOGOUT';
 
+/*
+  TODO: neue actions für LOADING, ERROR, SUCCESS für Produkte
+  + user-reducer kopieren und zu products-reducer umbauen
+ */
+
 export const FAVOURITES_ADD = 'FAVOURITES_ADD';
 export const FAVOURITES_REMOVE = 'FAVOURITES_REMOVE';
 
@@ -24,3 +29,7 @@ export function login(credentials) {
     }
   };
 }
+
+/*
+  TODO: thunk für loadProducts
+ */

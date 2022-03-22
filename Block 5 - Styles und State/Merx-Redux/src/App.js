@@ -14,6 +14,9 @@ import products from './products.json';
 import { store, persistor } from './store/store';
 
 export function App() {
+  /*
+    TODO: useEffect mit loadProducts
+   */
   return (
     <BrowserRouter>
       <Provider store={store}>

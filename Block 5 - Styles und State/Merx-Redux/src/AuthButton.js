@@ -2,7 +2,6 @@ import { Link as RouterLink } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
-
 import { USER_LOGOUT } from './store/actions';
 
 export function AuthButton() {
