@@ -1,10 +1,11 @@
 import { Link as RouterLink, useParams } from 'react-router-dom';
-import Link from '@mui/material/Link';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 import { ArrowBack, ArrowForward } from '@mui/icons-material';
 import { Price } from './Price';
 import { FavButton } from './FavButton';
+import { LastSeen } from './LastSeen';
 
 export function Product({ products }) {
   const params = useParams();
@@ -23,24 +24,16 @@ export function Product({ products }) {
       </Box>
 
       <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Link
-          color="primary"
-          underline="none"
-          component={RouterLink}
-          to={`/products/${+product.id - 1 || products.length}`}
-        >
+        <Button color="primary" component={RouterLink} to={`/products/${+product.id - 1 || products.length}`}>
           <ArrowBack /> Vorheriges Produkt
-        </Link>
+        </Button>
 
-        <Link
-          color="primary"
-          underline="none"
-          component={RouterLink}
-          to={`/products/${(+product.id % products.length) + 1}`}
-        >
+        <Button color="primary" component={RouterLink} to={`/products/${(+product.id % products.length) + 1}`}>
           Nächstes Produkt <ArrowForward />
-        </Link>
+        </Button>
       </Box>
+
+      <LastSeen products={products} id={product.id} />
     </Box>
   );
 }

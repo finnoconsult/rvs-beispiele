@@ -8,6 +8,7 @@ import { Header } from './Header';
 import { Product } from './Product';
 import { Products } from './Products';
 import { Favourites } from './Favourites';
+import { Login } from './Login';
 import { theme } from './theme';
 import products from './products.json';
 import { store, persistor } from './store/store';
@@ -26,6 +27,7 @@ export function App() {
                 <Route path="/" element={<Products products={products} />} />
                 <Route path="/products/:id" element={<Product products={products} />} />
                 <Route path="/favourites" element={<Favourites products={products} />} />
+                <Route path="/login" element={<Login />} />
               </Routes>
             </Container>
           </ThemeProvider>
