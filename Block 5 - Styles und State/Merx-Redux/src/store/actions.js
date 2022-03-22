@@ -3,3 +3,5 @@ export const USER_LOGOUT = 'USER_LOGOUT';
 
 export const FAVOURITES_ADD = 'FAVOURITES_ADD';
 export const FAVOURITES_REMOVE = 'FAVOURITES_REMOVE';
+
+export const LAST_SEEN_ADD = 'LAST_SEEN_ADD';
