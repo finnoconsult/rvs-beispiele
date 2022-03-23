@@ -44,7 +44,7 @@ export function Product() {
 
   return (
     <Box>
-      <img src={data.image} alt={data.title} />
+      <img src={data.image} alt={data.title} style={{ maxWidth: 400 }} />
       <Typography variant="h5" component="h2">
         {data.title}
       </Typography>
@@ -66,9 +66,6 @@ export function Product() {
         ))}
       </Grid>
 
-      <Typography variant="h5" as="h5" sx={{ marginTop: 4 }}>
-        Zuletzt gesehene Produkte
-      </Typography>
       <LastSeen id={data.id} />
     </Box>
   );

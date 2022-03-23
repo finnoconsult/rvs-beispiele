@@ -16,6 +16,7 @@ import { store, persistor } from './store/store';
 import { queryClient } from './queryClient';
 import { LanguageProvider } from './LanguageContext';
 import { FavouritesProvider } from './FavouritesContext';
+import { LastSeenProvider } from './LastSeenContext.js';
 
 export function App() {
   return (
@@ -24,25 +25,27 @@ export function App() {
         <ReduxProvider store={store}>
           <LanguageProvider>
             <FavouritesProvider>
-              <PersistGate loading={null} persistor={persistor}>
-                <ThemeProvider theme={theme}>
-                  <CssBaseline />
-                  <link
-                    rel="stylesheet"
-                    href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
-                  />
-                  <Header />
-                  <Container as="main" maxWidth="lg">
-                    <Routes>
-                      <Route path="/" element={<Products />} />
-                      <Route path="/products/:id" element={<Product />} />
-                      <Route path="/favourites" element={<Favourites />} />
-                      <Route path="/login" element={<Login />} />
-                    </Routes>
-                  </Container>
-                  <ReactQueryDevtools />
-                </ThemeProvider>
-              </PersistGate>
+              <LastSeenProvider>
+                <PersistGate loading={null} persistor={persistor}>
+                  <ThemeProvider theme={theme}>
+                    <CssBaseline />
+                    <link
+                      rel="stylesheet"
+                      href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+                    />
+                    <Header />
+                    <Container as="main" maxWidth="lg">
+                      <Routes>
+                        <Route path="/" element={<Products />} />
+                        <Route path="/products/:id" element={<Product />} />
+                        <Route path="/favourites" element={<Favourites />} />
+                        <Route path="/login" element={<Login />} />
+                      </Routes>
+                    </Container>
+                    <ReactQueryDevtools />
+                  </ThemeProvider>
+                </PersistGate>
+              </LastSeenProvider>
             </FavouritesProvider>
           </LanguageProvider>
         </ReduxProvider>
