@@ -4,8 +4,6 @@ import { useLocalStorageState } from './useLocalStorageState';
 const defaultValue = [];
 const FavouritesContext = createContext(defaultValue);
 
-export const FavouritesConsumer = FavouritesContext.Consumer;
-
 export const FavouritesProvider = ({ value, children }) => {
   const [favourites, setFavourites] = useLocalStorageState('favourites', defaultValue);
   const addFavourite = (id) => setFavourites([...favourites, id]);

@@ -1,25 +1,23 @@
-import { useSelector, useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
-import CircularProgress from '@mui/material/CircularProgress';
 import Button from '@mui/material/Button';
-import { login } from './store/actions';
-import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import CircularProgress from '@mui/material/CircularProgress';
+import Container from '@mui/material/Container';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import { useUser, login } from './UserContext';
 
 export function Login() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.user);
+  const [user, dispatch] = useUser();
 
   const onSubmit = async (event) => {
     event.preventDefault();
     const credentials = Object.fromEntries(new FormData(event.target));
-    dispatch(login(credentials));
+    login(credentials, dispatch);
   };
 
   // wenn wir eingeloggt sind, navigiere zur startseite

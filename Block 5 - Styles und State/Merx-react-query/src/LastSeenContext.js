@@ -5,8 +5,6 @@ const maxLength = 4;
 const defaultValue = [];
 const LastSeenContext = createContext(defaultValue);
 
-export const LastSeenConsumer = LastSeenContext.Consumer;
-
 export const LastSeenProvider = ({ children }) => {
   const [lastSeen, setLastSeen] = useLocalStorageState('last-seen', defaultValue);
   const contextValue = { lastSeen, setLastSeen };

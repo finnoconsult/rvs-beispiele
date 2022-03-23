@@ -9,6 +9,7 @@ import { ProductCard } from './ProductCard';
 export function Products() {
   const queryClient = useQueryClient();
   const { isLoading, error, data } = useQuery('products', {
+    /* UX-Zucker, füllt cache um Produkte teilweise anzeigen zu können, bevor wir alle Daten vom Server geladen haben */
     onSuccess(data) {
       data.forEach((product) =>
         queryClient.setQueryData(['products', product.id], (oldData) => ({ ...oldData, ...product }))
