@@ -10,13 +10,9 @@ import { Products } from './Products';
 import { Favourites } from './Favourites';
 import { Login } from './Login';
 import { theme } from './theme';
-import products from './products.json';
 import { store, persistor } from './store/store';
 
 export function App() {
-  /*
-    TODO: useEffect mit loadProducts
-   */
   return (
     <BrowserRouter>
       <Provider store={store}>
@@ -27,9 +23,9 @@ export function App() {
             <Header />
             <Container as="main" maxWidth="lg">
               <Routes>
-                <Route path="/" element={<Products products={products} />} />
-                <Route path="/products/:id" element={<Product products={products} />} />
-                <Route path="/favourites" element={<Favourites products={products} />} />
+                <Route path="/" element={<Products />} />
+                <Route path="/products/:id" element={<Product />} />
+                <Route path="/favourites" element={<Favourites />} />
                 <Route path="/login" element={<Login />} />
               </Routes>
             </Container>

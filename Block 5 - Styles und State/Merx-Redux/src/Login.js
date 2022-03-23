@@ -1,4 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
@@ -26,12 +28,22 @@ export function Login() {
   }, [user.isLoggedIn, navigate]);
 
   // während wir auf den server warten, zeigen wir einen spinner
-  if (user.isLoading) return <CircularProgress />;
+  if (user.isLoading)
+    return (
+      <Box textAlign="center" mt={2}>
+        <CircularProgress />
+      </Box>
+    );
 
   return (
     <Container component="main" maxWidth="xs">
-      {user.error && <div>error: {user.error}</div>}
       <Box marginTop={4} display="flex" flexDirection="column" alignItems="center">
+        {user.error && (
+          <Alert severity="error" sx={{ marginBottom: 3 }}>
+            <AlertTitle>Fehler</AlertTitle>
+            {user.error}
+          </Alert>
+        )}
         <Typography component="h2" variant="h5">
           Log in
         </Typography>

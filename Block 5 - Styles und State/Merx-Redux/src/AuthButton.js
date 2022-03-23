@@ -11,7 +11,7 @@ export function AuthButton() {
 
   if (user.isLoading) return <CircularProgress />;
 
-  if (user.error) return <span>⚠️</span>;
+  if (user.error) return <>⚠️</>;
 
   if (user.isLoggedIn)
     return (

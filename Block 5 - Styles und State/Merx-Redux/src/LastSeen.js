@@ -1,13 +1,13 @@
-import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Grid from '@mui/material/Grid';
 import { ProductCard } from './ProductCard';
 import { LAST_SEEN_ADD } from './store/actions';
 
-export function LastSeen({ products, id }) {
+export function LastSeen({ id }) {
   const dispatch = useDispatch();
-  const productMap = products.reduce((obj, p) => ((obj[p.id] = p), obj), {});
-  const lastSeen = useSelector((state) => state.lastSeen.map((id) => productMap[id]).slice(1));
+  const products = useSelector((state) => state.products.data);
+  const lastSeen = useSelector((state) => state.lastSeen.map((id) => products[id]).slice(1));
 
   useEffect(() => {
     if (id) dispatch({ type: LAST_SEEN_ADD, id });

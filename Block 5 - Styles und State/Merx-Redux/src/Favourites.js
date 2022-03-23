@@ -2,7 +2,9 @@ import Grid from '@mui/material/Grid';
 import { useSelector } from 'react-redux';
 import { ProductCard } from './ProductCard';
 
-export function Favourites({ products }) {
+export function Favourites() {
+  const products = []; // TODO remove
+
   const favourites = useSelector((state) => state.favourites);
   const filteredProducts = products.filter((product) => favourites.includes(product.id));
 

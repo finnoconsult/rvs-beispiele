@@ -2,7 +2,7 @@ import { USER_LOADING, USER_ERROR, USER_LOGIN, USER_LOGOUT } from './actions';
 
 const initialUserState = { isLoggedIn: false };
 
-export const userReducer = (state = initialUserState, action) => {
+export function userReducer(state = initialUserState, action) {
   switch (action.type) {
     case USER_LOADING:
       return { isLoggedIn: false, isLoading: true };
@@ -20,4 +20,4 @@ export const userReducer = (state = initialUserState, action) => {
       return state;
     }
   }
-};
+}

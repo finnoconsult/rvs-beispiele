@@ -2,7 +2,7 @@ import { FAVOURITES_ADD, FAVOURITES_REMOVE } from './actions';
 
 const initialFavouritesState = [];
 
-export const favouritesReducer = (state = initialFavouritesState, action) => {
+export function favouritesReducer(state = initialFavouritesState, action) {
   switch (action.type) {
     case FAVOURITES_ADD: {
       return [...state, action.id];
@@ -14,4 +14,4 @@ export const favouritesReducer = (state = initialFavouritesState, action) => {
       return state;
     }
   }
-};
+}
