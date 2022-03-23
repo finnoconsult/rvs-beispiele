@@ -1,5 +1,4 @@
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useQuery } from 'react-query';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -11,44 +10,39 @@ import { ArrowBack, ArrowForward } from '@mui/icons-material';
 import { Price } from './Price';
 import { FavButton } from './FavButton';
 import { LastSeen } from './LastSeen';
-import { loadProduct } from './store/actions';
 import { ProductCard } from './ProductCard';
 
 export function Product() {
   const params = useParams();
-  const id = params.id;
-  const dispatch = useDispatch();
-  const product = useSelector((state) => state.products.data[id]);
+  const { isLoading, error, data } = useQuery(['products', params.id]);
 
-  useEffect(() => {
-    if (!product?.bodyHtml && !product?.isLoading) dispatch(loadProduct(id));
-  }, [product?.bodyHtml, product?.isLoading, id, dispatch]);
-
-  if (!product || product.isLoading)
+  if (isLoading)
     return (
       <Box textAlign="center" mt={2}>
         <CircularProgress />
       </Box>
     );
 
-  if (product.error)
+  if (error)
     return (
       <Alert severity="error">
         <AlertTitle>Fehler</AlertTitle>
-        {product.error}
+        {error}
       </Alert>
     );
 
   return (
     <Box>
-      <img src={product.image} alt={product.title} />
+      <img src={data.image} alt={data.title} />
       <Typography variant="h5" component="h2">
-        {product.title}
+        {data.title}
       </Typography>
-      <Typography dangerouslySetInnerHTML={{ __html: product.bodyHtml || product.excerpt }} />
+
+      {data.bodyHtml ? <Typography dangerouslySetInnerHTML={{ __html: data.bodyHtml }} /> : <CircularProgress />}
+
       <Box display="flex" justifyContent="space-between">
-        <FavButton id={product.id} />
-        <Price price={product.price} />
+        <FavButton id={data.id} />
+        <Price price={data.price} />
       </Box>
 
       {/*<Box display="flex" justifyContent="space-between" alignItems="center">
@@ -63,7 +57,7 @@ export function Product() {
 
       <Typography variant="h4">Ähnliche Produkte</Typography>
       <Box display="flex" gap={3} mb={7} mt={3}>
-        {product.related?.map((id) => (
+        {data.related?.map((id) => (
           <Box key={id} width={250}>
             <ProductCard id={id} />
           </Box>
@@ -71,7 +65,7 @@ export function Product() {
       </Box>
 
       <Typography variant="h4">Zuletzt gesehene Produkte</Typography>
-      <LastSeen id={product.id} />
+      <LastSeen id={data.id} />
     </Box>
   );
 }
