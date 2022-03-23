@@ -1,12 +1,17 @@
+import { useQuery } from 'react-query';
 import Grid from '@mui/material/Grid';
-import { useSelector } from 'react-redux';
 import { ProductCard } from './ProductCard';
+import { useFavs } from './FavouritesContext';
 
 export function Favourites() {
-  const products = []; // TODO remove
+  const { isLoading, error, data } = useQuery('products');
+  const { favourites } = useFavs();
 
-  const favourites = useSelector((state) => state.favourites);
-  const filteredProducts = products.filter((product) => favourites.includes(product.id));
+  if (isLoading || error || !data) return null;
+
+  const filteredProducts = data.filter((product) => favourites.includes(product.id));
+
+  if (filteredProducts.length === 0) return <h1>Keine Favouriten vorhanden</h1>;
 
   return (
     <Grid container spacing={4} mt={0} mb={4}>

@@ -1,5 +1,4 @@
 import { Link as RouterLink } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import Container from '@mui/material/Container';
 import AppBar from '@mui/material/AppBar';
 import Badge from '@mui/material/Badge';
@@ -12,9 +11,10 @@ import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { AuthButton } from './AuthButton';
 import { useLocale } from './LanguageContext';
+import { useFavs } from './FavouritesContext';
 
 export function Header() {
-  const numberOfFavourites = useSelector((state) => state.favourites.length);
+  const { favourites } = useFavs();
   const { locale, setLocale } = useLocale();
   const handleLocaleChange = (event) => setLocale(event.target.value);
 
@@ -45,7 +45,7 @@ export function Header() {
             </IconButton>
 
             <IconButton component={RouterLink} to="/favourites" color="primary">
-              <Badge badgeContent={numberOfFavourites} color="default">
+              <Badge badgeContent={favourites.length} color="default">
                 <FavoriteIcon />
               </Badge>
             </IconButton>
