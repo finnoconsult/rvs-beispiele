@@ -11,9 +11,12 @@ import Box from '@mui/material/Box';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { AuthButton } from './AuthButton';
+import { useLocale } from './LanguageContext';
 
 export function Header() {
   const numberOfFavourites = useSelector((state) => state.favourites.length);
+  const { locale, setLocale } = useLocale();
+  const handleLocaleChange = (event) => setLocale(event.target.value);
 
   return (
     <AppBar
@@ -31,6 +34,12 @@ export function Header() {
           </Link>
 
           <Box as="nav" display="flex" alignItems="center" gap={2}>
+            <select value={locale} onChange={handleLocaleChange}>
+              <option value="de">de</option>
+              <option value="en">en</option>
+              <option value="fr">fr</option>
+            </select>
+
             <IconButton href="#" color="primary">
               <ShoppingCartIcon />
             </IconButton>

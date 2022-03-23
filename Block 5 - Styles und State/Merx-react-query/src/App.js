@@ -14,12 +14,14 @@ import { Login } from './Login';
 import { theme } from './theme';
 import { store, persistor } from './store/store';
 import { queryClient } from './queryClient';
+import { LanguageProvider } from './LanguageContext';
 
 export function App() {
   return (
     <BrowserRouter>
       <QueryClientProvider client={queryClient}>
         <ReduxProvider store={store}>
+          <LanguageProvider>
           <PersistGate loading={null} persistor={persistor}>
             <ThemeProvider theme={theme}>
               <CssBaseline />
@@ -39,6 +41,7 @@ export function App() {
               <ReactQueryDevtools />
             </ThemeProvider>
           </PersistGate>
+          </LanguageProvider>
         </ReduxProvider>
       </QueryClientProvider>
     </BrowserRouter>
