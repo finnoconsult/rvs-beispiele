@@ -8,25 +8,25 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import { useUser, login } from './UserContext';
+import { useUser } from './UserContext';
 
 export function Login() {
   const navigate = useNavigate();
-  const [user, dispatch] = useUser();
+  const { login, isLoggedIn, isLoading, error } = useUser();
 
   const onSubmit = async (event) => {
     event.preventDefault();
     const credentials = Object.fromEntries(new FormData(event.target));
-    login(credentials, dispatch);
+    login(credentials);
   };
 
   // wenn wir eingeloggt sind, navigiere zur startseite
   useEffect(() => {
-    if (user.isLoggedIn) navigate('/');
-  }, [user.isLoggedIn, navigate]);
+    if (isLoggedIn) navigate('/');
+  }, [isLoggedIn, navigate]);
 
   // während wir auf den server warten, zeigen wir einen spinner
-  if (user.isLoading)
+  if (isLoading)
     return (
       <Box textAlign="center" mt={2}>
         <CircularProgress />
@@ -36,10 +36,10 @@ export function Login() {
   return (
     <Container component="main" maxWidth="xs">
       <Box marginTop={4} display="flex" flexDirection="column" alignItems="center">
-        {user.error && (
+        {error && (
           <Alert severity="error" sx={{ marginBottom: 3 }}>
             <AlertTitle>Fehler</AlertTitle>
-            {user.error}
+            {error}
           </Alert>
         )}
         <Typography component="h2" variant="h5">

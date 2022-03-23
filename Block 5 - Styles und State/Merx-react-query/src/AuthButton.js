@@ -12,18 +12,16 @@ const LOCALE = {
 
 export function AuthButton() {
   const { locale } = useLocale();
-  const [user, dispatch] = useUser();
+  const { login, logout, isLoggedIn, isLoading, error, data } = useUser();
 
-  const logout = () => dispatch({ type: 'USER_LOGOUT' });
+  if (isLoading) return <CircularProgress />;
 
-  if (user.isLoading) return <CircularProgress />;
+  if (error) return <>⚠️</>;
 
-  if (user.error) return <>⚠️</>;
-
-  if (user.isLoggedIn)
+  if (isLoggedIn)
     return (
       <Button onClick={logout} color="primary" variant="outlined">
-        {user.name}
+        {data.name}
       </Button>
     );
 
