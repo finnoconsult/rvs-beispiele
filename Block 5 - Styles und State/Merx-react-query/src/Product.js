@@ -1,16 +1,27 @@
 import { useQuery } from 'react-query';
-import { Link as RouterLink, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
-import { ArrowBack, ArrowForward } from '@mui/icons-material';
+import Grid from '@mui/material/Grid';
 import { Price } from './Price';
 import { FavButton } from './FavButton';
 import { LastSeen } from './LastSeen';
 import { ProductCard } from './ProductCard';
+
+function RelatedProduct({ id }) {
+  const { data } = useQuery(['products', id]);
+
+  if (!data) return null;
+
+  return (
+    <Grid item xs={12} sm={6} md={3}>
+      <ProductCard {...data} />
+    </Grid>
+  );
+}
 
 export function Product() {
   const params = useParams();
@@ -45,26 +56,19 @@ export function Product() {
         <Price price={data.price} />
       </Box>
 
-      {/*<Box display="flex" justifyContent="space-between" alignItems="center">
-        <Button color="primary" component={RouterLink} to={`/products/${+product.id - 1 || products.length}`}>
-          <ArrowBack /> Vorheriges Produkt
-        </Button>
+      <Typography variant="h5" as="h5" sx={{ marginTop: 4 }}>
+        Ähnliche Produkte
+      </Typography>
 
-        <Button color="primary" component={RouterLink} to={`/products/${(+product.id % products.length) + 1}`}>
-          Nächstes Produkt <ArrowForward />
-        </Button>
-      </Box>*/}
-
-      <Typography variant="h4">Ähnliche Produkte</Typography>
-      <Box display="flex" gap={3} mb={7} mt={3}>
+      <Grid container spacing={4} mt={0} mb={4}>
         {data.related?.map((id) => (
-          <Box key={id} width={250}>
-            <ProductCard id={id} />
-          </Box>
+          <RelatedProduct key={id} id={id} />
         ))}
-      </Box>
+      </Grid>
 
-      <Typography variant="h4">Zuletzt gesehene Produkte</Typography>
+      <Typography variant="h5" as="h5" sx={{ marginTop: 4 }}>
+        Zuletzt gesehene Produkte
+      </Typography>
       <LastSeen id={data.id} />
     </Box>
   );
