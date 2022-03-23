@@ -7,6 +7,8 @@ import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { AuthButton } from './AuthButton';
@@ -34,12 +36,11 @@ export function Header() {
           </Link>
 
           <Box as="nav" display="flex" alignItems="center" gap={2}>
-            <select value={locale} onChange={handleLocaleChange}>
-              <option value="de">de</option>
-              <option value="en">en</option>
-              <option value="fr">fr</option>
-            </select>
-
+            <Select label="Locale" value={locale} onChange={handleLocaleChange} sx={{ height: 32 }}>
+              <MenuItem value="de">DE</MenuItem>
+              <MenuItem value="en">EN</MenuItem>
+              <MenuItem value="fr">FR</MenuItem>
+            </Select>
             <IconButton href="#" color="primary">
               <ShoppingCartIcon />
             </IconButton>
