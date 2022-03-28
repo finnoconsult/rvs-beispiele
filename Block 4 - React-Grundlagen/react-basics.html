@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://unpkg.com/react@17.0.1/umd/react.development.js"></script>
+    <!-- <script src="https://unpkg.com/react@17.0.1/umd/react.production.min.js"></script> -->
+    <script src="https://unpkg.com/react-dom@17.0.1/umd/react-dom.development.js"></script>
+    <!-- <script src="https://unpkg.com/react-dom@17.0.1/umd/react-dom.production.min.js"></script> -->
+    <script src="https://unpkg.com/@babel/standalone@7.12.4/babel.js"></script>
+    <script src="https://unpkg.com/prop-types@15.7.2/prop-types.js"></script>
+    <!-- CSS only -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+      crossorigin="anonymous"
+    />
+    <title>React Basics</title>
+  </head>
+  <body>
+    <div id="root"></div>
+
+    <!-- <script type="module">
+      const gruss = new Date().getHours() < 12 ? 'Morgen' : 'Tag';
+      // imperativ
+      const element = document.createElement('div');
+      element.textContent = `Guten ${gruss}`;
+      element.className = 'container';
+
+      document.body.append(element);
+    </script> -->
+
+    <!-- <script type="module">
+      // deklarativ
+      const password = React.createElement('code', {
+        className: 'code',
+        children: Math.random().toString(32).slice(2),
+      })
+
+      const element = React.createElement('div', {
+        className: 'container',
+        children: ['Guten', password]
+      });
+
+      ReactDOM.render(element, document.body);
+    </script> -->
+
+    <!-- <script type="text/babel">
+      const gruss = new Date().getHours() < 12 ? 'Morgen' : 'Tag';
+
+      const element = <div className="container">Guten {gruss}</div>;
+
+      ReactDOM.render(element, document.getElementById('root'));
+    </script> -->
+
+    <script type="text/babel">
+      const gruss = new Date().getHours() < 12 ? 'Morgen' : 'Tag';
+
+      function Password(props) {
+        const size = (props.size || 5) + 2;
+        const password = Math.random().toString(32).slice(2, size);
+
+        return (
+          <div className="alert alert-primary" role="alert">
+            <h4 className="alert-heading">Passwortvorschlag</h4>
+            <code className="code fs-5" style={{ color: 'red', paddingTop: 5 }}>
+              {password}
+            </code>
+          </div>
+        );
+      }
+
+      Password.propTypes = {
+        size: PropTypes.number.isRequired,
+      };
+
+      /*
+        Password.propTypes = {
+          size(props, propName, componentName) {
+            // prüfung
+            if (!props.size) throw new Error(`${componentName} requires ${propName} to be passed`);
+            if (typeof props.size !== 'number') throw new Error(`${componentName} requires ${propName} to be a number`);
+            if (props.size < 3 || props.size > 12)
+              throw new Error(`${componentName} requires ${propName} to be a number between 3 and 12`);
+          },
+        };
+      */
+
+      const element = (
+        <div className="container">
+          <div>Guten {new Date().getHours() < 12 ? 'Morgen' : 'Tag'}</div>
+          <div className="hallo" title="gruß">
+            Guten Nacht
+          </div>
+          {/*
+            <Password />
+            <Password size="3" />
+          */}
+          <Password size={8} />
+        </div>
+      );
+
+      ReactDOM.render(element, document.getElementById('root'));
+    </script>
+  </body>
+</html>
