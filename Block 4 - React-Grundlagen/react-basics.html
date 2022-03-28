@@ -54,7 +54,7 @@
       ReactDOM.render(element, document.getElementById('root'));
     </script> -->
 
-    <script type="text/babel">
+    <!-- <script type="text/babel">
       const gruss = new Date().getHours() < 12 ? 'Morgen' : 'Tag';
 
       function Password(props) {
@@ -98,6 +98,61 @@
             <Password size="3" />
           */}
           <Password size={8} />
+        </div>
+      );
+
+      ReactDOM.render(element, document.getElementById('root'));
+    </script> -->
+
+    <script type="text/babel">
+      function getInputClass(isValid) {
+        if (isValid === true) return 'is-valid';
+        if (isValid === false) return 'is-invalid';
+        return '';
+      }
+
+      function Formular() {
+        const inputRef = React.useRef();
+        const [isValid, setIsValid] = React.useState();
+
+        const onChange = (event) => {
+          const input = inputRef.current;
+          const value = input.value;
+
+          if (!value) setIsValid(null);
+          else {
+            const tempIsValid = value.length >= 5 && /\d+/.test(value) && /[A-Z]+/.test(value) && /[a-z]+/.test(value);
+            setIsValid(tempIsValid);
+          }
+        };
+
+        const inputClass = getInputClass(isValid);
+
+        return (
+          <form onChange={onChange}>
+            <label htmlFor="password">Password</label>
+            <input
+              ref={inputRef}
+              type="text"
+              className={`form-control ${inputClass}`}
+              id="password"
+              autoComplete="off"
+              required
+            />
+            <div className="valid-feedback">Looks good!</div>
+            <div id="validationServer03Feedback" className="invalid-feedback">
+              Min. 5 Zeichen und 1 Zahl und 1 Groß- und 1 Kleinbuchstabe
+            </div>
+            <button className="btn btn-primary mt-2" type="button" disabled>
+              Registrieren
+            </button>
+          </form>
+        );
+      }
+
+      const element = (
+        <div className="container">
+          <Formular />
         </div>
       );
 
