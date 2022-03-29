@@ -1,10 +1,10 @@
-import React from 'react';
 // import { Counter } from './Counter';
 // import { IBAN } from './IBAN';
 // import { Obstliste } from './Obstliste';
 // import { Kennzeichen } from './Kennzeichen';
 // import { Message } from './Message';
-import { TicTacToe } from './TicTacToe';
+// import { TicTacToe } from './TicTacToe';
+import { Exchange } from './Exchange';
 
 export default function App() {
   return (
@@ -20,8 +20,10 @@ export default function App() {
         <Counter />
         <hr />
         <Message />
+        <hr />
+        <TicTacToe />
       */}
-      <TicTacToe />
+      <Exchange />
     </div>
   );
 }
