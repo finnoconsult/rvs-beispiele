@@ -4,26 +4,22 @@
 // import { Kennzeichen } from './Kennzeichen';
 // import { Message } from './Message';
 // import { TicTacToe } from './TicTacToe';
-import { Exchange } from './Exchange';
+// import { Exchange } from './Exchange';
+import { Pokedex } from './Pokedex';
 
 export default function App() {
   return (
     <div className="container mt-3">
       {/*
-        <hr />
         <IBAN />
-        <hr />
         <Obstliste />
-        <hr />
         <Kennzeichen />
-        <hr />
         <Counter />
-        <hr />
         <Message />
-        <hr />
         <TicTacToe />
+        <Exchange />
       */}
-      <Exchange />
+      <Pokedex />
     </div>
   );
 }
