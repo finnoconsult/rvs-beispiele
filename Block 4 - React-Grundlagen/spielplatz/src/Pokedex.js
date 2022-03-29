@@ -55,47 +55,51 @@ function PokeSearch({ value, onChange }) {
   );
 }
 
+const STATES = {
+  INIT: 'INIT',
+  LOADING: 'LOADING',
+  SUCCESS: 'SUCCESS',
+  ERROR: 'ERROR',
+};
+
 function PokeData({ pokeId }) {
-  const [pokemon, setPokemon] = useState();
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [state, setState] = useState({ status: STATES.INIT });
+
+  const { status, error, pokemon } = state;
 
   useEffect(() => {
-    console.log('lade daten für pokeId', pokeId);
-    setIsLoading(true);
-    setError(null);
+    setState({ status: STATES.LOADING });
+
     fetch(`https://pokeapi.co/api/v2/pokemon/${pokeId}`)
       .then((response) => {
-        if (!response.ok) {
-          throw new Error('404 Pokemon not found');
-        }
-        console.log('daten geladen für pokeId', pokeId);
-        setIsLoading(false);
-        return response.json();
+        if (response.ok) return response.json();
+        throw new Error('404 Pokemon not found');
       })
-      .then(setPokemon)
+      .then((json) => {
+        setState({ status: STATES.SUCCESS, pokemon: json });
+      })
       .catch((error) => {
-        console.log('da ging was schief', error);
-        setIsLoading(false);
-        setError(error.message);
+        setState({ status: STATES.ERROR, error: error.message });
       });
   }, [pokeId]);
 
-  if (isLoading)
+  if (status === STATES.LOADING)
     return (
       <div className="text-center mt-5 mb-5">
         <div className="spinner-grow text-secondary" />
       </div>
     );
 
-  if (error)
+  if (status === STATES.ERROR)
     return (
       <div className="alert alert-danger" role="alert">
         {error}
       </div>
     );
 
-  if (!pokemon) return null;
+  if (status === STATES.INIT) return null;
+
+  // womöglich: status === STATES.SUCCESS
 
   const name = toTitleCase(pokemon.name).replace('-f', ' ♀').replace('-m', ' ♂');
   const image = pokemon.sprites.other['official-artwork'].front_default || pokemon.sprites.front_default;
