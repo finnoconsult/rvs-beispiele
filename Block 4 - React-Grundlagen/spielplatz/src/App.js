@@ -3,7 +3,8 @@ import React from 'react';
 // import { IBAN } from './IBAN';
 // import { Obstliste } from './Obstliste';
 // import { Kennzeichen } from './Kennzeichen';
-import { TicTacToe } from './TicTacToe';
+// import { TicTacToe } from './TicTacToe';
+import { Message } from './Message';
 
 export default function App() {
   return (
@@ -16,8 +17,9 @@ export default function App() {
         <Obstliste />
         <hr />
         <Kennzeichen />
-      */}
       <TicTacToe />
+      */}
+      <Message />
     </div>
   );
 }
