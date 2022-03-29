@@ -16,13 +16,14 @@ export function TicTacToe() {
   const status = getStatusMessage(winner, squares, nextPlayer);
 
   function updateSquare(squareIndex) {
-    const newSquares = [...squares];
-    // TODO Felder mit neuem Wert aktualisieren, sofern angebracht
-    setSquares(newSquares);
+    if (winner || squares[squareIndex]) return;
+    const squaresCopy = [...squares];
+    squaresCopy[squareIndex] = nextPlayer;
+    setSquares(squaresCopy);
   }
 
   function restart() {
-    // TODO Zustand des Spiels zurücksetzen
+    setSquares(Array(9).fill(null));
   }
 
   return (
@@ -47,7 +48,9 @@ export function TicTacToe() {
 // -- Helper functions ---
 
 function getNextPlayer(squares) {
-  // TODO durch Auswertung der Felder herausfinden, wer als nächstes am Zug ist
+  const xCount = squares.filter((r) => r === 'X').length;
+  const oCount = squares.filter((r) => r === 'O').length;
+  return xCount === oCount ? 'X' : 'O';
 }
 
 function getStatusMessage(winner, squares, nextPlayer) {
