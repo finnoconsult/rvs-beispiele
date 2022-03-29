@@ -1,4 +1,5 @@
 import { useLocalStorageState } from './useLocalStorageState';
+import { useWidth } from './useWidth';
 import './TicTacToe.css';
 
 /* Aufgaben:
@@ -8,6 +9,7 @@ import './TicTacToe.css';
 */
 
 export function TicTacToe() {
+  const width = useWidth();
   const [history, setHistory] = useLocalStorageState('ttt-history', [Array(9).fill(null)]);
   const pushToHistory = (stateArr) => setHistory([...history, stateArr]);
   const restart = () => setHistory(history.slice(0, 1));
@@ -23,10 +25,14 @@ export function TicTacToe() {
       <button onClick={undo} className="btn btn-secondary" disabled={history.length <= 1}>
         undo
       </button>
-      <h4 style={{ marginTop: 24 }}>History</h4>
-      {[...history].reverse().map((board, index) => (
-        <Board key={index} squares={board} />
-      ))}
+      {width > 300 && (
+        <>
+          <h4 style={{ marginTop: 24 }}>History</h4>
+          {[...history].reverse().map((board, index) => (
+            <Board key={index} squares={board} />
+          ))}
+        </>
+      )}
     </div>
   );
 }
