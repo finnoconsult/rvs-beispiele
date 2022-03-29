@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useLocalStorageState } from './useLocalStorageState';
 import './TicTacToe.css';
 
 /* Aufgaben:
@@ -8,9 +8,30 @@ import './TicTacToe.css';
 */
 
 export function TicTacToe() {
-  // INFO unsere neun Felder, anfänglich sind alle `null`
-  const [squares, setSquares] = useState(Array(9).fill(null));
+  const [history, setHistory] = useLocalStorageState('ttt-history', [Array(9).fill(null)]);
+  const pushToHistory = (stateArr) => setHistory([...history, stateArr]);
+  const restart = () => setHistory(history.slice(0, 1));
+  const undo = () => setHistory(history.slice(0, -1));
+  const lastState = history[history.length - 1];
 
+  return (
+    <div className="game">
+      <Board squares={lastState} handleUpdate={pushToHistory} />
+      <button onClick={restart} className="btn btn-primary">
+        restart
+      </button>{' '}
+      <button onClick={undo} className="btn btn-secondary" disabled={history.length <= 1}>
+        undo
+      </button>
+      <h4 style={{ marginTop: 24 }}>History</h4>
+      {[...history].reverse().map((board, index) => (
+        <Board key={index} squares={board} />
+      ))}
+    </div>
+  );
+}
+
+function Board({ squares, handleUpdate }) {
   const nextPlayer = getNextPlayer(squares);
   const winner = getWinner(squares);
   const status = getStatusMessage(winner, squares, nextPlayer);
@@ -19,16 +40,11 @@ export function TicTacToe() {
     if (winner || squares[squareIndex]) return;
     const squaresCopy = [...squares];
     squaresCopy[squareIndex] = nextPlayer;
-    setSquares(squaresCopy);
+    handleUpdate(squaresCopy);
   }
 
-  const restart = () => setSquares(Array(9).fill(null));
-  const undo = () => {
-    /* todo */
-  };
-
   return (
-    <div className="game">
+    <>
       <div className="status">{status}</div>
       <div className="squares">
         {squares.map((square, index) => (
@@ -37,13 +53,7 @@ export function TicTacToe() {
           </button>
         ))}
       </div>
-      <button className="btn btn-primary" onClick={restart}>
-        restart
-      </button>{' '}
-      <button className="btn btn-secondary" onClick={undo}>
-        undo
-      </button>
-    </div>
+    </>
   );
 }
 
