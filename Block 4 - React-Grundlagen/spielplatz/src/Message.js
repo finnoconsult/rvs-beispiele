@@ -1,19 +1,18 @@
-import { useState, useEffect } from 'react';
-
-function useLocalStorageState(key, initialValue = '') {
-  const [value, setValue] = useState(() => window.localStorage.getItem(key) ?? initialValue);
-
-  useEffect(() => {
-    window.localStorage.setItem(key, value);
-  }, [key, value]);
-
-  return [value, setValue];
-}
+import { useLocalStorageState } from './useLocalStorageState';
 
 export function Message() {
   const [message, setMessage] = useLocalStorageState('message-backup');
+  const [savePoints, setSavePoints] = useLocalStorageState('savepoints', []);
 
   const onChange = (event) => setMessage(event.target.value);
+
+  const addSavePoint = () => {
+    setSavePoints([message, ...savePoints]);
+  };
+
+  const restoreSavePoint = () => {
+    setMessage(savePoints[0]);
+  };
 
   return (
     <form className="container my-2">
@@ -22,6 +21,16 @@ export function Message() {
       <button className="btn btn-primary mt-2" type="button">
         Absenden
       </button>
+
+      <div className="mt-2">
+        <button className="btn btn-secondary mt-2" type="button" onClick={addSavePoint}>
+          Speichern
+        </button>{' '}
+        <button className="btn btn-secondary mt-2" type="button" onClick={restoreSavePoint}>
+          Undo
+        </button>{' '}
+        {savePoints.length}
+      </div>
     </form>
   );
 }

@@ -1,14 +1,19 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
+import { useLocalStorageState } from './useLocalStorageState';
+
+function useTitle(value) {
+  useEffect(() => {
+    document.title = value;
+  }, [value]);
+}
 
 export function Counter() {
-  const [counter, setCounter] = useState(0);
+  const [counter, setCounter] = useLocalStorageState('counter-backup', 0);
   const increase = () => setCounter(counter + 1);
   const decrease = () => setCounter(counter - 1);
   const buttonStyle = { color: counter % 2 ? 'red' : 'green' };
 
-  useEffect(() => {
-    document.title = `Klicks: ${counter}`;
-  }, [counter]);
+  useTitle(`Klicks: ${counter}`);
 
   return (
     <>

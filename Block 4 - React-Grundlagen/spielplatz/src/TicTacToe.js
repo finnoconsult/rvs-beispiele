@@ -22,14 +22,14 @@ export function TicTacToe() {
     setSquares(squaresCopy);
   }
 
-  function restart() {
-    setSquares(Array(9).fill(null));
-  }
+  const restart = () => setSquares(Array(9).fill(null));
+  const undo = () => {
+    /* todo */
+  };
 
   return (
     <div className="game">
       <div className="status">{status}</div>
-
       <div className="squares">
         {squares.map((square, index) => (
           <button key={index} onClick={() => updateSquare(index)}>
@@ -37,9 +37,11 @@ export function TicTacToe() {
           </button>
         ))}
       </div>
-
-      <button className="restart" onClick={restart}>
+      <button className="btn btn-primary" onClick={restart}>
         restart
+      </button>{' '}
+      <button className="btn btn-secondary" onClick={undo}>
+        undo
       </button>
     </div>
   );
