@@ -4,7 +4,7 @@ import { ProductCard } from './ProductCard';
 import { ErrorFallback } from './ErrorFallback';
 import { API_URL } from './config';
 
-export function Products({ showProduct }) {
+export function Products() {
   const { status, error, data } = useApi(API_URL);
 
   if (status === STATES.LOADING)
@@ -32,8 +32,8 @@ export function Products({ showProduct }) {
       }}
     >
       {data.map((product) => (
-        <ErrorBoundary key={product.id} FallbackComponent={ErrorFallback} onReset={() => showProduct(null)}>
-          <ProductCard {...product} onClick={showProduct} />
+        <ErrorBoundary key={product.id} FallbackComponent={ErrorFallback}>
+          <ProductCard {...product} />
         </ErrorBoundary>
       ))}
     </div>
