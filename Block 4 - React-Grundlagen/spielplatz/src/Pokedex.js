@@ -62,6 +62,8 @@ const STATES = {
   ERROR: 'ERROR',
 };
 
+const randomTimeout = (data) => new Promise((resolve) => setTimeout(resolve, Math.random() * 5000, data));
+
 function PokeData({ pokeId }) {
   const [state, setState] = useState({ status: STATES.INIT });
 
@@ -69,9 +71,15 @@ function PokeData({ pokeId }) {
 
   useEffect(() => {
     setState({ status: STATES.LOADING });
+    let isCanceled = false;
+
+    console.log('🚀 loading data', pokeId);
 
     fetch(`https://pokeapi.co/api/v2/pokemon/${pokeId}`)
+      .then(randomTimeout)
       .then((response) => {
+        if (isCanceled) throw null;
+        console.log('✅ response arrived', pokeId);
         if (response.ok) return response.json();
         throw new Error('404 Pokemon not found');
       })
@@ -79,8 +87,15 @@ function PokeData({ pokeId }) {
         setState({ status: STATES.SUCCESS, pokemon: json });
       })
       .catch((error) => {
+        if (isCanceled) return;
+        console.log('❌ error occured', pokeId);
         setState({ status: STATES.ERROR, error: error.message });
       });
+
+    return () => {
+      isCanceled = true;
+      console.log('❌ effect cleaned up', pokeId);
+    };
   }, [pokeId]);
 
   if (status === STATES.LOADING)
@@ -113,7 +128,7 @@ function PokeData({ pokeId }) {
           <ul className="list-group list-group-flush">
             {pokemon.abilities.map((ability) => (
               <li key={ability.ability.name} className="list-group-item">
-                {ability.ability.name}
+                {toTitleCase(ability.ability.name)}
               </li>
             ))}
           </ul>
