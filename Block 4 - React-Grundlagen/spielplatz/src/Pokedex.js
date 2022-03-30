@@ -64,43 +64,42 @@ const STATES = {
 
 const randomTimeout = (data) => new Promise((resolve) => setTimeout(resolve, Math.random() * 5000, data));
 
-function PokeData({ pokeId }) {
+function useApi(url) {
   const [state, setState] = useState({ status: STATES.INIT });
 
-  const { status, error, pokemon } = state;
-
   useEffect(() => {
-    if (!pokeId) return;
+    if (!url) return;
 
     setState({ status: STATES.LOADING });
 
     const controller = new AbortController();
     const signal = controller.signal;
 
-    console.log('🚀 loading data', pokeId);
-
-    fetch(`https://pokeapi.co/api/v2/pokemon/${pokeId}`, { signal })
+    fetch(url, { signal })
       .then(randomTimeout)
       .then((response) => {
         if (signal.aborted) throw null;
-        console.log('✅ response arrived', pokeId, signal.aborted);
         if (response.ok) return response.json();
-        throw new Error('404 Pokemon not found');
+        throw new Error('404 Data not found');
       })
       .then((json) => {
-        setState({ status: STATES.SUCCESS, pokemon: json });
+        setState({ status: STATES.SUCCESS, data: json });
       })
       .catch((error) => {
         if (signal.aborted) return;
-        console.log('❌ error occured', pokeId, signal.aborted);
         setState({ status: STATES.ERROR, error: error.message });
       });
 
     return () => {
       controller.abort();
-      console.log('❌ effect cleaned up', pokeId, signal.aborted);
     };
-  }, [pokeId]);
+  }, [url]);
+
+  return state;
+}
+
+function PokeData({ pokeId }) {
+  const { status, error, data } = useApi(`https://pokeapi.co/api/v2/pokemon/${pokeId}`);
 
   if (status === STATES.LOADING)
     return (
@@ -120,8 +119,8 @@ function PokeData({ pokeId }) {
 
   // womöglich: status === STATES.SUCCESS
 
-  const name = toTitleCase(pokemon.name).replace('-f', ' ♀').replace('-m', ' ♂');
-  const image = pokemon.sprites.other['official-artwork'].front_default || pokemon.sprites.front_default;
+  const name = toTitleCase(data.name).replace('-f', ' ♀').replace('-m', ' ♂');
+  const image = data.sprites.other['official-artwork'].front_default || data.sprites.front_default;
 
   return (
     <div className="card shadow-sm">
@@ -130,7 +129,7 @@ function PokeData({ pokeId }) {
         <h2 className="card-title">{name}</h2>
         <div className="card mt-2">
           <ul className="list-group list-group-flush">
-            {pokemon.abilities.map((ability) => (
+            {data.abilities.map((ability) => (
               <li key={ability.ability.name} className="list-group-item">
                 {toTitleCase(ability.ability.name)}
               </li>
