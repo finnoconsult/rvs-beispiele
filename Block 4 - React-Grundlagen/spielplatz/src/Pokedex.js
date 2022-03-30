@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
 
 const toTitleCase = (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
 
@@ -62,8 +63,6 @@ const STATES = {
   ERROR: 'ERROR',
 };
 
-const randomTimeout = (data) => new Promise((resolve) => setTimeout(resolve, Math.random() * 5000, data));
-
 function useApi(url) {
   const [state, setState] = useState({ status: STATES.INIT });
 
@@ -72,26 +71,21 @@ function useApi(url) {
 
     setState({ status: STATES.LOADING });
 
-    const controller = new AbortController();
-    const signal = controller.signal;
+    const CancelToken = axios.CancelToken;
+    const source = CancelToken.source();
 
-    fetch(url, { signal })
-      .then(randomTimeout)
+    axios
+      .get(url, { cancelToken: source.token })
       .then((response) => {
-        if (signal.aborted) throw null;
-        if (response.ok) return response.json();
-        throw new Error('404 Data not found');
-      })
-      .then((json) => {
-        setState({ status: STATES.SUCCESS, data: json });
+        setState({ status: STATES.SUCCESS, data: response.data });
       })
       .catch((error) => {
-        if (signal.aborted) return;
+        if (axios.isCancel(error)) return;
         setState({ status: STATES.ERROR, error: error.message });
       });
 
     return () => {
-      controller.abort();
+      source.cancel('request canceled');
     };
   }, [url]);
 
