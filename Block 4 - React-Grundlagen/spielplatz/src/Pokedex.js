@@ -70,16 +70,20 @@ function PokeData({ pokeId }) {
   const { status, error, pokemon } = state;
 
   useEffect(() => {
+    if (!pokeId) return;
+
     setState({ status: STATES.LOADING });
-    let isCanceled = false;
+
+    const controller = new AbortController();
+    const signal = controller.signal;
 
     console.log('🚀 loading data', pokeId);
 
-    fetch(`https://pokeapi.co/api/v2/pokemon/${pokeId}`)
+    fetch(`https://pokeapi.co/api/v2/pokemon/${pokeId}`, { signal })
       .then(randomTimeout)
       .then((response) => {
-        if (isCanceled) throw null;
-        console.log('✅ response arrived', pokeId);
+        if (signal.aborted) throw null;
+        console.log('✅ response arrived', pokeId, signal.aborted);
         if (response.ok) return response.json();
         throw new Error('404 Pokemon not found');
       })
@@ -87,14 +91,14 @@ function PokeData({ pokeId }) {
         setState({ status: STATES.SUCCESS, pokemon: json });
       })
       .catch((error) => {
-        if (isCanceled) return;
-        console.log('❌ error occured', pokeId);
+        if (signal.aborted) return;
+        console.log('❌ error occured', pokeId, signal.aborted);
         setState({ status: STATES.ERROR, error: error.message });
       });
 
     return () => {
-      isCanceled = true;
-      console.log('❌ effect cleaned up', pokeId);
+      controller.abort();
+      console.log('❌ effect cleaned up', pokeId, signal.aborted);
     };
   }, [pokeId]);
 
