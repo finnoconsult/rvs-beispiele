@@ -1,10 +1,24 @@
 import { useState, useEffect, useRef } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 import axios from 'axios';
 
 const toTitleCase = (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
 
+function ErrorFallback({ error, resetErrorBoundary }) {
+  return (
+    <div className="alert alert-danger" role="alert">
+      <h4 className="alert-heading">Error</h4>
+      <p>{error.message}</p>
+      <button onClick={resetErrorBoundary} type="button" className="btn btn-danger">
+        Reset
+      </button>
+    </div>
+  );
+}
+
 export function Pokedex() {
   const [pokeId, setPokeId] = useState(null);
+  const resetPokeId = () => setPokeId(null);
 
   return (
     <div style={{ maxWidth: 300, margin: '0 auto' }}>
@@ -23,7 +37,11 @@ export function Pokedex() {
           </button>
         </div>
       </div>
-      {pokeId && <PokeData pokeId={pokeId} />}
+      {pokeId && (
+        <ErrorBoundary FallbackComponent={ErrorFallback} onReset={resetPokeId} resetKeys={[pokeId]}>
+          <PokeData pokeId={pokeId} />
+        </ErrorBoundary>
+      )}
     </div>
   );
 }
@@ -63,6 +81,8 @@ const STATES = {
   ERROR: 'ERROR',
 };
 
+// const randomTimeout = data => new Promise(resolve => setTimeout(resolve, Math.random() * 5000, data));
+
 function useApi(url) {
   const [state, setState] = useState({ status: STATES.INIT });
 
@@ -76,6 +96,7 @@ function useApi(url) {
 
     axios
       .get(url, { cancelToken: source.token })
+      // .then(randomTimeout)
       .then((response) => {
         setState({ status: STATES.SUCCESS, data: response.data });
       })
@@ -111,10 +132,12 @@ function PokeData({ pokeId }) {
 
   if (status === STATES.INIT) return null;
 
-  // womöglich: status === STATES.SUCCESS
-
   const name = toTitleCase(data.name).replace('-f', ' ♀').replace('-m', ' ♂');
   const image = data.sprites.other['official-artwork'].front_default || data.sprites.front_default;
+
+  // if (Math.random() > 0.5) {
+  //   throw new Error('boom');
+  // }
 
   return (
     <div className="card shadow-sm">
@@ -123,9 +146,9 @@ function PokeData({ pokeId }) {
         <h2 className="card-title">{name}</h2>
         <div className="card mt-2">
           <ul className="list-group list-group-flush">
-            {data.abilities.map((ability) => (
-              <li key={ability.ability.name} className="list-group-item">
-                {toTitleCase(ability.ability.name)}
+            {data.abilities.map(({ ability }) => (
+              <li key={ability.name} className="list-group-item">
+                {toTitleCase(ability.name)}
               </li>
             ))}
           </ul>
