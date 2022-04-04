@@ -1,0 +1,10 @@
+@value variables: "./variables.css";
+@value primary from variables;
+
+.price {
+  padding: 1rem;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: right;
+  color: primary;
+}

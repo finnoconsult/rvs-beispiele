@@ -1,0 +1,21 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  border: 2px solid #ddd;
+  border-radius: 0.5rem;
+}
+
+.image {
+  width: 100%;
+}
+
+.title {
+  font-size: 20px;
+  padding: 0 1rem;
+  word-break: break-word;
+}
+
+.body {
+  flex: 1;
+  padding: 0 1rem;
+}
