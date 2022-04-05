@@ -1,12 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-import TextField from '@mui/material/TextField';
-import CircularProgress from '@mui/material/CircularProgress';
-import Button from '@mui/material/Button';
+import { Box, Container, Typography, TextField, CircularProgress, Button } from '@mui/material/Box';
 import { login } from './store/user-reducer';
 
 export function Login() {
@@ -23,7 +18,7 @@ export function Login() {
 
   useEffect(() => {
     if (user.isLoggedIn) navigate('/');
-  }, [user.isLoggedIn]);
+  }, [user.isLoggedIn, navigate]);
 
   if (user.isLoading) return <CircularProgress />;
 
