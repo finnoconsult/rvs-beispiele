@@ -2,7 +2,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import { Container, AppBar, Badge, Link, Button, IconButton, Toolbar, Typography, Box } from '@mui/material';
 import { Favorite, ShoppingCart } from '@mui/icons-material';
 
-export function Header() {
+export function Header({ isLoggedIn, toggleLogin, favourites }) {
   return (
     <AppBar
       position="static"
@@ -24,14 +24,17 @@ export function Header() {
             </IconButton>
 
             <IconButton component={RouterLink} to="/favourites" color="primary">
-              <Badge badgeContent={0} color="primary">
+              <Badge badgeContent={favourites.length} color="primary">
                 <Favorite />
               </Badge>
             </IconButton>
 
-            <Button component={RouterLink} to="/login" color="primary" variant="outlined">
-              Login
+            <Button onClick={toggleLogin} color="primary" variant="outlined">
+              {isLoggedIn ? 'Logout' : 'Login'}
             </Button>
+            {/*<Button component={RouterLink} to="/login" color="primary" variant="outlined">
+              Login
+            </Button>*/}
           </Box>
         </Toolbar>
       </Container>
