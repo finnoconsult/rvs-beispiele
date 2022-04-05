@@ -1,25 +1,11 @@
 import { Link as RouterLink } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import {
-  Container,
-  AppBar,
-  Badge,
-  Link,
-  Button,
-  IconButton,
-  Toolbar,
-  Typography,
-  Box,
-  CircularProgress,
-} from '@mui/material';
+import { useSelector } from 'react-redux';
+import { Container, AppBar, Badge, Link, IconButton, Toolbar, Typography, Box } from '@mui/material';
 import { Favorite, ShoppingCart } from '@mui/icons-material';
-import { USER_LOGOUT } from './store/actions';
+import { AuthButton } from './AuthButton';
 
 export function Header() {
-  const user = useSelector((state) => state.user);
   const favourites = useSelector((state) => state.favourites);
-  const dispatch = useDispatch();
-  const logout = () => dispatch({ type: USER_LOGOUT });
 
   return (
     <AppBar
@@ -47,17 +33,7 @@ export function Header() {
               </Badge>
             </IconButton>
 
-            {user.isLoggedIn ? (
-              <Button onClick={logout} color="primary" variant="outlined">
-                {user.name}
-              </Button>
-            ) : user.isLoading ? (
-              <CircularProgress />
-            ) : (
-              <Button component={RouterLink} to="/login" color="primary" variant="outlined">
-                Login
-              </Button>
-            )}
+            <AuthButton />
           </Box>
         </Toolbar>
       </Container>
