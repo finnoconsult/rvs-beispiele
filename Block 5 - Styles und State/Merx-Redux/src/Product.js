@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
-import { Box, IconButton, Typography } from '@mui/material';
-import { Favorite } from '@mui/icons-material';
+import { Box, Typography } from '@mui/material';
 import { Price } from './Price';
+import { FavButton } from './FavButton';
 
 export function Product({ products }) {
   const params = useParams();
@@ -15,9 +15,7 @@ export function Product({ products }) {
       </Typography>
       <Typography>{product.body}</Typography>
       <Box display="flex" justifyContent="space-between">
-        <IconButton variant="contained" type="button">
-          <Favorite />
-        </IconButton>
+        <FavButton id={product.id} />
         <Price price={product.price} />
       </Box>
     </Box>

@@ -1,11 +1,10 @@
 import { Link as RouterLink } from 'react-router-dom';
-import { Link, Card, CardActions, CardContent, CardMedia, IconButton, Typography } from '@mui/material';
-import { FavoriteOutlined, FavoriteBorderOutlined } from '@mui/icons-material';
+import { Link, Card, CardActions, CardContent, CardMedia, Typography } from '@mui/material';
 import { Price } from './Price';
+import { FavButton } from './FavButton';
 
-export function ProductCard({ id, image, title, body, price, isLoggedIn, favourites, toggleFav }) {
+export function ProductCard({ id, image, title, body, price }) {
   const url = `/products/${id}`;
-  const isFav = favourites.includes(id);
 
   return (
     <Card variant="outlined" sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -24,10 +23,7 @@ export function ProductCard({ id, image, title, body, price, isLoggedIn, favouri
       </CardContent>
 
       <CardActions sx={{ justifyContent: 'space-between', px: 2, pt: 0 }}>
-        <IconButton onClick={() => toggleFav(id)} color="primary">
-          {isLoggedIn ? isFav ? <FavoriteOutlined /> : <FavoriteBorderOutlined /> : null}
-        </IconButton>
-
+        <FavButton id={id} />
         <Price price={price} />
       </CardActions>
     </Card>
