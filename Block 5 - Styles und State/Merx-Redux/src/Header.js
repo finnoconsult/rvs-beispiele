@@ -1,17 +1,25 @@
 import { Link as RouterLink } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { Container, AppBar, Badge, Link, Button, IconButton, Toolbar, Typography, Box } from '@mui/material';
+import {
+  Container,
+  AppBar,
+  Badge,
+  Link,
+  Button,
+  IconButton,
+  Toolbar,
+  Typography,
+  Box,
+  CircularProgress,
+} from '@mui/material';
 import { Favorite, ShoppingCart } from '@mui/icons-material';
-import { FavButton } from './FavButton';
-import { USER_LOGIN, USER_LOGOUT } from './store/actions';
+import { USER_LOGOUT } from './store/actions';
 
 export function Header() {
-  const isLoggedIn = useSelector((state) => state.user.isLoggedIn);
+  const user = useSelector((state) => state.user);
   const favourites = useSelector((state) => state.favourites);
   const dispatch = useDispatch();
-  const login = () => dispatch({ type: USER_LOGIN });
   const logout = () => dispatch({ type: USER_LOGOUT });
-  const toggleLogin = isLoggedIn ? logout : login;
 
   return (
     <AppBar
@@ -29,8 +37,6 @@ export function Header() {
           </Link>
 
           <Box as="nav" display="flex" alignItems="center" gap={2}>
-            <FavButton id="2" />
-
             <IconButton href="#" color="primary">
               <ShoppingCart />
             </IconButton>
@@ -41,12 +47,17 @@ export function Header() {
               </Badge>
             </IconButton>
 
-            <Button onClick={toggleLogin} color="primary" variant="outlined">
-              {isLoggedIn ? 'Logout' : 'Login'}
-            </Button>
-            {/*<Button component={RouterLink} to="/login" color="primary" variant="outlined">
-              Login
-            </Button>*/}
+            {user.isLoggedIn ? (
+              <Button onClick={logout} color="primary" variant="outlined">
+                {user.name}
+              </Button>
+            ) : user.isLoading ? (
+              <CircularProgress />
+            ) : (
+              <Button component={RouterLink} to="/login" color="primary" variant="outlined">
+                Login
+              </Button>
+            )}
           </Box>
         </Toolbar>
       </Container>
