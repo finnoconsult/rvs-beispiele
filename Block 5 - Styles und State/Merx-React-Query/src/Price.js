@@ -9,3 +9,7 @@ export function Price({ price }) {
     </Box>
   );
 }
+
+// Price.propTypes = {
+//   price: PropTypes.string.required;
+// }
