@@ -6,6 +6,7 @@ import { CssBaseline, Container } from '@mui/material';
 import { Header } from './Header';
 import { Product } from './Product';
 import { Products } from './Products';
+import { Favourites } from './Favourites';
 import { Login } from './Login';
 import { theme } from './theme';
 import { queryClient } from './queryClient';
@@ -34,6 +35,7 @@ export function App() {
                       <Route path="/" element={<Products />} />
                       <Route path="/products/:id" element={<Product />} />
                       <Route path="/login" element={<Login />} />
+                      <Route path="/favourites" element={<Favourites />} />
                     </Routes>
                   </Container>
                 </LanguageProvider>
