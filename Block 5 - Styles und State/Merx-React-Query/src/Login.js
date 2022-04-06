@@ -1,34 +1,42 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { Box, Container, Typography, TextField, CircularProgress, Button } from '@mui/material';
-import { login } from './store/actions';
+import { Box, Container, Typography, TextField, CircularProgress, Button, Alert, AlertTitle } from '@mui/material';
+import { useUser } from './UserContext';
 
 export function Login() {
   const navigate = useNavigate();
-
-  const user = useSelector((state) => state.user);
-  const dispatch = useDispatch();
+  const { isLoggedIn, isLoading, error, login } = useUser();
 
   const onSubmit = (event) => {
     event.preventDefault();
     const credentials = Object.fromEntries(new FormData(event.target));
-    dispatch(login(credentials));
+    login(credentials);
   };
 
   useEffect(() => {
-    if (user.isLoggedIn) navigate('/');
-  }, [user.isLoggedIn, navigate]);
-
-  if (user.isLoading) return <CircularProgress />;
+    if (isLoggedIn) navigate('/');
+  }, [isLoggedIn, navigate]);
 
   return (
     <Container component="main" maxWidth="xs">
-      {user.error && <div>{user.error}</div>}
       <Box marginTop={4} display="flex" flexDirection="column" alignItems="center">
         <Typography component="h2" variant="h5">
           Log in
         </Typography>
+
+        {isLoading && (
+          <Box textAlign="center" mt={2}>
+            <CircularProgress />
+          </Box>
+        )}
+
+        {error && (
+          <Alert severity="error" sx={{ marginTop: 3, width: '100%' }}>
+            <AlertTitle>Fehler</AlertTitle>
+            {error}
+          </Alert>
+        )}
+
         <Box as="form" width="100%" mt={2} onSubmit={onSubmit}>
           <TextField
             variant="outlined"
@@ -42,6 +50,7 @@ export function Login() {
             fullWidth
             required
           />
+
           <TextField
             variant="outlined"
             margin="normal"
@@ -54,6 +63,7 @@ export function Login() {
             fullWidth
             required
           />
+
           <Button type="submit" variant="contained" color="primary" fullWidth sx={{ marginTop: 2 }}>
             Log in
           </Button>

@@ -1,9 +1,14 @@
-import { useQuery } from 'react-query';
+import { useQuery, useQueryClient } from 'react-query';
 import { Grid, Box, CircularProgress, Alert, AlertTitle } from '@mui/material';
 import { ProductCard } from './ProductCard';
 
 export function Products() {
-  const { isLoading, error, data } = useQuery('products');
+  const queryClient = useQueryClient();
+  const { isLoading, error, data } = useQuery('products', {
+    onSuccess(data) {
+      data.data.forEach((product) => queryClient.setQueryData(`products/${product.id}`, () => ({ data: product })));
+    },
+  });
 
   if (isLoading)
     return (

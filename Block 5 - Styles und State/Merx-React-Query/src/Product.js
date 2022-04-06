@@ -32,7 +32,13 @@ export function Product() {
       <Typography variant="h5" component="h2">
         {product.title}
       </Typography>
-      <Typography>{product.excerpt}</Typography>
+      {product.bodyHtml ? (
+        <Typography dangerouslySetInnerHTML={{ __html: product.bodyHtml }} />
+      ) : (
+        <Box textAlign="center" mt={2}>
+          <CircularProgress />
+        </Box>
+      )}
       <Box display="flex" justifyContent="space-between">
         <FavButton id={product.id} />
         <Price price={product.price} />

@@ -1,8 +1,7 @@
 import { Link as RouterLink } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
 import { Button, CircularProgress } from '@mui/material';
-import { USER_LOGOUT } from './store/actions';
 import { useLanguage } from './LanguageContext';
+import { useUser } from './UserContext';
 
 const languageMap = {
   de: 'Anmelden',
@@ -12,18 +11,16 @@ const languageMap = {
 
 export function AuthButton() {
   const { language } = useLanguage();
-  const user = useSelector((state) => state.user);
-  const dispatch = useDispatch();
-  const logout = () => dispatch({ type: USER_LOGOUT });
+  const { isLoggedIn, isLoading, data, error, logout } = useUser();
 
-  if (user.isLoading) return <CircularProgress />;
+  if (isLoading) return <CircularProgress />;
 
-  if (user.error) return <span>⚠️</span>;
+  if (error) return <span>⚠️</span>;
 
-  if (user.isLoggedIn)
+  if (isLoggedIn)
     return (
       <Button onClick={logout} color="primary" variant="outlined">
-        {user.name}
+        {data.name}
       </Button>
     );
 
