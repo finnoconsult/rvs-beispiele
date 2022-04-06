@@ -5,11 +5,13 @@ import storage from 'redux-persist/lib/storage'; // defaults to localStorage for
 import { userReducer } from './user-reducer';
 import { favouritesReducer } from './favourites-reducer';
 import { lastViewedReducer } from './last-viewed-reducer';
+import { productsReducer } from './products-reducer';
 
 const rootReducer = combineReducers({
   user: userReducer,
   favourites: favouritesReducer,
   lastViewed: lastViewedReducer,
+  products: productsReducer,
 });
 
 const persistConfig = {

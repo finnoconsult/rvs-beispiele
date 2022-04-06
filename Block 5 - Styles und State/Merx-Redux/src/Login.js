@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { Box, Container, Typography, TextField, CircularProgress, Button } from '@mui/material';
-import { login } from './store/user-reducer';
+import { login } from './store/actions';
 
 export function Login() {
   const navigate = useNavigate();

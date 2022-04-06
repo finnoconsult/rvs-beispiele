@@ -8,10 +8,7 @@ import { Product } from './Product';
 import { Products } from './Products';
 import { Login } from './Login';
 import { theme } from './theme';
-import products from './products.json';
 import { store, persistor } from './store/store';
-
-window.store = store;
 
 export function App() {
   return (
@@ -24,8 +21,8 @@ export function App() {
             <Header />
             <Container as="main" maxWidth="lg">
               <Routes>
-                <Route path="/" element={<Products products={products} />} />
-                <Route path="/products/:id" element={<Product products={products} />} />
+                <Route path="/" element={<Products />} />
+                <Route path="/products/:id" element={<Product />} />
                 <Route path="/login" element={<Login />} />
               </Routes>
             </Container>

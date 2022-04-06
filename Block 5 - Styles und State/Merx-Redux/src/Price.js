@@ -1,6 +1,6 @@
 import { Box } from '@mui/material';
 
-const priceToNum = (price) => parseInt(price.replace(',', '.'), 10);
+const priceToNum = (price = '') => parseInt(price.replace(',', '.'), 10);
 
 export function Price({ price }) {
   return (

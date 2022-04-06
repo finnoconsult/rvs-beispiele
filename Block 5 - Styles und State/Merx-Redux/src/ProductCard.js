@@ -3,7 +3,7 @@ import { Link, Card, CardActions, CardContent, CardMedia, Typography } from '@mu
 import { Price } from './Price';
 import { FavButton } from './FavButton';
 
-export function ProductCard({ id, image, title, body, price }) {
+export function ProductCard({ id, image, title, excerpt, price }) {
   const url = `/products/${id}`;
 
   return (
@@ -19,7 +19,7 @@ export function ProductCard({ id, image, title, body, price }) {
           </Typography>
         </Link>
 
-        <Typography>{body}</Typography>
+        <Typography>{excerpt}</Typography>
       </CardContent>
 
       <CardActions sx={{ justifyContent: 'space-between', px: 2, pt: 0 }}>
