@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query';
-import { Grid } from '@mui/material';
+import { Grid, Skeleton, Stack } from '@mui/material';
 import { ProductCard } from './ProductCard';
 import { useFavourites } from './FavouritesContext';
 
@@ -7,7 +7,14 @@ export function Favourites() {
   const { isLoading, error, data } = useQuery('products');
   const { favourites } = useFavourites();
 
-  if (isLoading || error) return null;
+  if (isLoading || error)
+    return (
+      <Stack spacing={1} width={370} marginTop={3}>
+        <Skeleton variant="rectangular" width={370} height={370} />
+        <Skeleton variant="text" />
+        <Skeleton variant="text" />
+      </Stack>
+    );
 
   const favouritsProducts = favourites.map((favId) => data.data.find((product) => product.id === favId));
 
