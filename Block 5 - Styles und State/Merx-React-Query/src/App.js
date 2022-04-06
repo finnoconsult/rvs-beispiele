@@ -1,5 +1,5 @@
 import { Provider as ReduxProvider } from 'react-redux';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClientProvider } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { PersistGate } from 'redux-persist/integration/react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
@@ -11,16 +11,7 @@ import { Products } from './Products';
 import { Login } from './Login';
 import { theme } from './theme';
 import { store, persistor } from './store/store';
-
-const loadFromServer = ({ queryKey }) => fetch(`http://localhost:3001/${queryKey[0]}`).then((res) => res.json());
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      queryFn: loadFromServer,
-    },
-  },
-});
+import { queryClient } from './queryClient';
 
 export function App() {
   return (
