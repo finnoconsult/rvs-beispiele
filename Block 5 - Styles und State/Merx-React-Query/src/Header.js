@@ -1,11 +1,14 @@
 import { Link as RouterLink } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { Container, AppBar, Badge, Link, IconButton, Toolbar, Typography, Box } from '@mui/material';
+import { Container, AppBar, Badge, Link, IconButton, Toolbar, Typography, Box, Select, MenuItem } from '@mui/material';
 import { Favorite, ShoppingCart } from '@mui/icons-material';
 import { AuthButton } from './AuthButton';
+import { useLanguage } from './LanguageContext';
 
 export function Header() {
   const favourites = useSelector((state) => state.favourites);
+  const { language, setLanguage } = useLanguage();
+  const handleLocaleChange = (event) => setLanguage(event.target.value);
 
   return (
     <AppBar
@@ -23,6 +26,12 @@ export function Header() {
           </Link>
 
           <Box as="nav" display="flex" alignItems="center" gap={2}>
+            <Select label="Locale" value={language} onChange={handleLocaleChange} sx={{ height: 32 }}>
+              <MenuItem value="de">DE</MenuItem>
+              <MenuItem value="en">EN</MenuItem>
+              <MenuItem value="fr">FR</MenuItem>
+            </Select>
+
             <IconButton href="#" color="primary">
               <ShoppingCart />
             </IconButton>

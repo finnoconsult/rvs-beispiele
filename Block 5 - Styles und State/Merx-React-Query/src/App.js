@@ -13,6 +13,8 @@ import { theme } from './theme';
 import { store, persistor } from './store/store';
 import { queryClient } from './queryClient';
 
+import { LanguageProvider } from './LanguageContext';
+
 export function App() {
   return (
     <BrowserRouter>
@@ -20,19 +22,21 @@ export function App() {
         <ReduxProvider store={store}>
           <PersistGate loading={null} persistor={persistor}>
             <ThemeProvider theme={theme}>
-              <CssBaseline />
-              <link
-                rel="stylesheet"
-                href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
-              />
-              <Header />
-              <Container as="main" maxWidth="lg">
-                <Routes>
-                  <Route path="/" element={<Products />} />
-                  <Route path="/products/:id" element={<Product />} />
-                  <Route path="/login" element={<Login />} />
-                </Routes>
-              </Container>
+              <LanguageProvider>
+                <CssBaseline />
+                <link
+                  rel="stylesheet"
+                  href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+                />
+                <Header />
+                <Container as="main" maxWidth="lg">
+                  <Routes>
+                    <Route path="/" element={<Products />} />
+                    <Route path="/products/:id" element={<Product />} />
+                    <Route path="/login" element={<Login />} />
+                  </Routes>
+                </Container>
+              </LanguageProvider>
             </ThemeProvider>
           </PersistGate>
         </ReduxProvider>
