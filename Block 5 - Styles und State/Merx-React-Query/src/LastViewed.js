@@ -1,26 +1,28 @@
+import { useEffect } from 'react';
 import { useQuery } from 'react-query';
-import { useSelector, useDispatch } from 'react-redux';
 import { Grid } from '@mui/material';
 import { ProductCard } from './ProductCard';
-import { useEffect } from 'react';
-import { LAST_VIEWED_ADD } from './store/actions';
+import { useLastViewed } from './LastViewedContext';
 
 export function LastViewed({ id }) {
   const { isLoading, error, data } = useQuery('products');
-  const lastViewedIds = useSelector((state) => state.lastViewed);
-  const dispatch = useDispatch();
+  const { lastViewed, addLastViewed } = useLastViewed();
 
   useEffect(() => {
-    dispatch({ type: LAST_VIEWED_ADD, payload: { id } });
-  }, [id, dispatch]);
+    addLastViewed(id);
+  }, [id]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (isLoading || error) return null;
 
+  const lastViewedProducts = lastViewed
+    .filter((lvId) => lvId !== id)
+    .map((lvId) => data.data.find((product) => product.id === lvId));
+
   return (
     <Grid container spacing={4} mt={0} mb={4}>
-      {lastViewedIds.map((id) => (
-        <Grid item key={id} xs={12} sm={6} md={4}>
-          <ProductCard key={id} {...data.data[id]} />
+      {lastViewedProducts.map((product) => (
+        <Grid item key={product.id} xs={12} sm={6} md={4}>
+          <ProductCard key={product.id} {...product} />
         </Grid>
       ))}
     </Grid>
