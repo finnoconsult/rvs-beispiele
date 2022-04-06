@@ -3,19 +3,17 @@ import { persistStore, persistReducer } from 'redux-persist';
 import thunk from 'redux-thunk';
 import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
 import { userReducer } from './user-reducer';
-import { favouritesReducer } from './favourites-reducer';
 import { lastViewedReducer } from './last-viewed-reducer';
 
 const rootReducer = combineReducers({
   user: userReducer,
-  favourites: favouritesReducer,
   lastViewed: lastViewedReducer,
 });
 
 const persistConfig = {
   key: 'merx',
   storage,
-  whitelist: ['favourites', 'lastViewed'],
+  whitelist: ['lastViewed'],
 };
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);

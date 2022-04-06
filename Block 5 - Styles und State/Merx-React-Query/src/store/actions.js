@@ -3,9 +3,6 @@ export const USER_LOADING = 'USER_LOADING';
 export const USER_ERROR = 'USER_ERROR';
 export const USER_LOGOUT = 'USER_LOGOUT';
 
-export const FAVOURITES_ADD = 'FAVOURITES_ADD';
-export const FAVOURITES_REMOVE = 'FAVOURITES_REMOVE';
-
 export const LAST_VIEWED_ADD = 'LAST_VIEWED_ADD';
 
 export function login(credentials) {

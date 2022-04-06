@@ -1,12 +1,12 @@
 import { Link as RouterLink } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import { Container, AppBar, Badge, Link, IconButton, Toolbar, Typography, Box, Select, MenuItem } from '@mui/material';
 import { Favorite, ShoppingCart } from '@mui/icons-material';
 import { AuthButton } from './AuthButton';
 import { useLanguage } from './LanguageContext';
+import { useFavourites } from './FavouritesContext';
 
 export function Header() {
-  const favourites = useSelector((state) => state.favourites);
+  const { favourites } = useFavourites();
   const { language, setLanguage } = useLanguage();
   const handleLocaleChange = (event) => setLanguage(event.target.value);
 
